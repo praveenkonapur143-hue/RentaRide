@@ -38,7 +38,7 @@ class InMemoryStore {
     {
       id: 'notif-1',
       title: 'Booking Overdue',
-      message: 'Booking RR-BK-2025-005 for vehicle Mercedes S-Class is overdue by 1 day.',
+      message: 'Booking RR-BK-2025-005 for vehicle Toyota Fortuner Legender is overdue by 1 day.',
       type: 'ALERT',
       isRead: false,
       link: '/dashboard/bookings/bk-05',
@@ -128,7 +128,7 @@ class InMemoryStore {
       registrationExpiryDate: data.registrationExpiryDate || '',
       pollutionExpiryDate: data.pollutionExpiryDate || '',
       images: data.images?.length ? data.images : [
-        { id: `img-${Date.now()}`, url: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800', caption: 'Front', isPrimary: true }
+        { id: `img-${Date.now()}`, url: '/images/cars/swift.jpg', caption: 'Front', isPrimary: true }
       ],
       documents: data.documents || [],
       notes: data.notes || '',

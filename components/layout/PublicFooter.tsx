@@ -44,7 +44,7 @@ export function PublicFooter() {
             <h4 className="text-white text-sm font-bold uppercase tracking-wider mb-4">Policies & Safety</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="hover:text-white transition">Motor Vehicles Act (1988/2019) Terms</a></li>
-              <li><a href="#" className="hover:text-white transition">Zoom Shield Damage Waiver</a></li>
+              <li><a href="#" className="hover:text-white transition">RentaRide Shield Damage Waiver</a></li>
               <li><a href="#" className="hover:text-white transition">FASTag Toll Policy & Deductions</a></li>
               <li><a href="#" className="hover:text-white transition">Speed Governor (80-100 km/h) Rules</a></li>
               <li><a href="#" className="hover:text-white transition">DigiLocker & Aadhaar Verification</a></li>

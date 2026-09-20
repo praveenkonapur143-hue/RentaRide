@@ -80,7 +80,7 @@ export const PROTECTION_PLANS: ProtectionPlan[] = [
   },
   {
     id: 'peace_of_mind',
-    name: 'Peace of Mind Cover (Zoom Shield)',
+    name: 'Peace of Mind Cover (RentaRide Shield)',
     pricePerDay: 299,
     damageLiabilityCap: 0,
     description: 'Zero damage liability for all accidental exterior and mechanical repairs.',

@@ -354,7 +354,7 @@ export default function BookingDetailPage({ params }: { params: { id: string } }
           </div>
           <div className="flex items-center gap-3">
             <img
-              src={vehicle?.images?.[0]?.url || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=200'}
+              src={vehicle?.images?.[0]?.url || '/images/cars/swift.jpg'}
               alt={vehicle?.brand}
               className="w-16 h-12 object-cover rounded-xl"
             />

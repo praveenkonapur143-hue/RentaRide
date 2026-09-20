@@ -13,14 +13,14 @@ export function PublicNav() {
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-700 to-emerald-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition transform">
-            Z
+            R
           </div>
           <div>
             <span className="text-2xl font-black tracking-tight text-slate-900">
               Renta<span className="text-emerald-600">Ride</span>
             </span>
             <span className="block text-[11px] font-bold text-emerald-700 -mt-1 tracking-wide">
-              Self-Drive India • Zoom Experience
+              Self-Drive India • Zero Security Deposit
             </span>
           </div>
         </Link>
@@ -34,7 +34,7 @@ export function PublicNav() {
             How It Works
           </Link>
           <Link href="/#benefits" className="hover:text-emerald-600 transition">
-            Zoom Advantage
+            RentaRide Advantage
           </Link>
           <Link href="/#testimonials" className="hover:text-emerald-600 transition">
             Reviews

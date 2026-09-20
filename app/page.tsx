@@ -32,6 +32,8 @@ import { formatINR, POPULAR_INDIAN_HUBS, KM_PACKAGES } from '@/lib/currency';
 // Anti-AI Bespoke Interactive Components
 import RoadTripTicker from '@/components/interactive/RoadTripTicker';
 import CarStudioVisualizer from '@/components/interactive/CarStudioVisualizer';
+import SpeedometerShowcase from '@/components/interactive/SpeedometerShowcase';
+import ContactlessTripSteps from '@/components/interactive/ContactlessTripSteps';
 import TripCostCalculator from '@/components/interactive/TripCostCalculator';
 import LiveHubRadar from '@/components/interactive/LiveHubRadar';
 import DynamicTripIsland from '@/components/interactive/DynamicTripIsland';
@@ -113,7 +115,7 @@ export default function LandingPage() {
       {/* Live Dispatches Ticker */}
       <RoadTripTicker />
 
-      {/* Hero Section - Zoomcar Aesthetic */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-emerald-950 text-white pt-20 pb-32">
         {/* Background glow & accents */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-500/20 via-transparent to-transparent" />
@@ -136,7 +138,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-lg sm:text-xl text-slate-300 max-w-2xl font-normal leading-relaxed">
-                Drive anywhere from city commutes to outstation hill roads. Verified fleet of Swift, Creta, Mahindra Thar 4x4, and Fortuner with <strong>Unlimited Kms</strong> & <strong>Doorstep Delivery</strong>.
+                Drive anywhere from city commutes to outstation hill roads. Verified fleet of Swift, Baleno, Creta, Mahindra Thar 4x4, and Innova Crysta with <strong>Unlimited Kms</strong> & <strong>Doorstep Delivery</strong>.
               </p>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -158,7 +160,7 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              {/* Zoomcar Key USPs */}
+              {/* Key USPs */}
               <div className="pt-8 grid grid-cols-3 gap-6 border-t border-slate-800/80 max-w-lg mx-auto lg:mx-0">
                 <div>
                   <p className="text-2xl sm:text-3xl font-black text-white">FASTag</p>
@@ -180,7 +182,7 @@ export default function LandingPage() {
               <div className="relative rounded-3xl p-3 bg-gradient-to-b from-white/10 to-white/5 border border-white/10 backdrop-blur-xl shadow-2xl">
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-800">
                   <img
-                    src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=900"
+                    src="/images/cars/thar.jpg"
                     alt="Mahindra Thar 4x4 Adventure"
                     className="w-full h-full object-cover"
                   />
@@ -198,7 +200,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Interactive Zoomcar Search Bar Widget */}
+      {/* Interactive Quick Trip Search Bar */}
       <section className="-mt-14 relative z-20 max-w-6xl mx-auto px-4 w-full">
         <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-8">
           {/* Delivery Mode Toggle */}
@@ -329,6 +331,9 @@ export default function LandingPage() {
       {/* Flagship Showstopper: Interactive Car Studio */}
       <CarStudioVisualizer onQuickCheckout={(vId) => handleOpenCheckout(vId)} />
 
+      {/* Automotive Telemetry & Dynamic Gauge Engine */}
+      <SpeedometerShowcase />
+
       {/* Category Filter Bar & Catalog */}
       <section className="pt-20 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center max-w-3xl mx-auto mb-10">
@@ -379,7 +384,7 @@ export default function LandingPage() {
                   {/* Photo & Status Badge */}
                   <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
                     <img
-                      src={vehicle.images[0]?.url || 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800'}
+                      src={vehicle.images[0]?.url || '/images/cars/swift.jpg'}
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -485,7 +490,7 @@ export default function LandingPage() {
       {/* Road Trip vs Flight Fare Calculator */}
       <TripCostCalculator />
 
-      {/* Why Choose Zoomcar / RentaRide Features */}
+      {/* Why Choose RentaRide Features */}
       <section className="py-20 bg-slate-50 border-t border-b border-slate-200/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -546,6 +551,9 @@ export default function LandingPage() {
 
       {/* Transit Radar & Hub Telemetry */}
       <LiveHubRadar onSelectHubCity={(city) => setSelectedCity(city)} />
+
+      {/* 3-Step Contactless Journey with Interactive Bluetooth Unlock */}
+      <ContactlessTripSteps />
 
       {/* Customer Testimonials */}
       <section className="py-20 bg-white">

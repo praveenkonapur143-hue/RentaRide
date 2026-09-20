@@ -56,7 +56,7 @@ function NewBookingForm() {
     (searchParams.get('delivery') as any) === 'DOORSTEP' ? 'DOORSTEP_DELIVERY' : 'HUB_PICKUP'
   );
 
-  // Zoomcar Packages
+  // Kilometre Packages
   const [kmPackage, setKmPackage] = useState<'standard' | 'traveler' | 'unlimited'>('standard');
   const [protectionPlan, setProtectionPlan] = useState<'standard' | 'peace_of_mind'>('peace_of_mind');
 
@@ -228,7 +228,7 @@ function NewBookingForm() {
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">Create Self-Drive Trip</h1>
           <p className="text-xs text-slate-500">
-            Real-time availability verification, Zoomcar KM package selection, and 18% GST invoicing.
+            Real-time availability verification, flexible KM package selection, and 18% GST invoicing.
           </p>
         </div>
       </div>
@@ -316,11 +316,11 @@ function NewBookingForm() {
             )}
           </div>
 
-          {/* Zoomcar Kilometre Package Selector */}
+          {/* Kilometre Package Selector */}
           <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
             <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
               <Navigation className="w-4 h-4 text-emerald-600" />
-              <span>Select Kilometre Package (Zoomcar Model)</span>
+              <span>Select Kilometre Package</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -349,11 +349,11 @@ function NewBookingForm() {
             </div>
           </div>
 
-          {/* Zoom Shield Damage Protection Plan */}
+          {/* RentaRide Shield Damage Protection Plan */}
           <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
             <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Zoom Shield Damage Protection</span>
+              <span>RentaRide Shield Damage Protection</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -557,7 +557,7 @@ function NewBookingForm() {
             {selectedVehicle && (
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
                 <img
-                  src={selectedVehicle.images?.[0]?.url || 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=200'}
+                  src={selectedVehicle.images?.[0]?.url || '/images/cars/swift.jpg'}
                   alt={selectedVehicle.brand}
                   className="w-16 h-12 object-cover rounded-xl shrink-0"
                 />
@@ -574,25 +574,20 @@ function NewBookingForm() {
             {/* Calculations Breakdown */}
             <div className="space-y-2.5 text-xs">
               <div className="flex items-center justify-between text-slate-600">
-                <span>Trip Duration:</span>
-                <span className="font-bold text-slate-900">{rawPricing.days} day{rawPricing.days > 1 ? 's' : ''}</span>
-              </div>
-
-              <div className="flex items-center justify-between text-slate-600">
-                <span>Base Daily Rate:</span>
-                <span className="font-medium text-slate-900">{formatINR(baseDailyRate)}</span>
+                <span>Base Rental ({rawPricing.days} {rawPricing.days === 1 ? 'day' : 'days'}):</span>
+                <span className="font-medium text-slate-900">{formatINR(baseDailyRate * rawPricing.days)}</span>
               </div>
 
               {selectedKmPkg.pricePerDayAddon > 0 && (
                 <div className="flex items-center justify-between text-slate-600">
-                  <span>KM Add-on ({selectedKmPkg.name}):</span>
+                  <span>KM Package Add-on:</span>
                   <span className="font-medium text-slate-900">+{formatINR(selectedKmPkg.pricePerDayAddon * rawPricing.days)}</span>
                 </div>
               )}
 
               {selectedProtPlan.pricePerDay > 0 && (
                 <div className="flex items-center justify-between text-slate-600">
-                  <span>Zoom Shield Protection:</span>
+                  <span>RentaRide Shield Protection:</span>
                   <span className="font-medium text-slate-900">+{formatINR(selectedProtPlan.pricePerDay * rawPricing.days)}</span>
                 </div>
               )}

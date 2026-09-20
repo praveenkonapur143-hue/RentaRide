@@ -156,7 +156,7 @@ export default function VehiclesPage() {
               {/* Image & Status Badge */}
               <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
                 <img
-                  src={v.images?.[0]?.url || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600'}
+                  src={v.images?.[0]?.url || '/images/cars/swift.jpg'}
                   alt={`${v.brand} ${v.model}`}
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                 />

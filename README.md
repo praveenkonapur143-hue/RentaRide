@@ -1,8 +1,8 @@
-# RentaRide — Zoomcar-Style Self-Drive Car Rental Platform
+# RentaRide — Premier Self-Drive Car Rental Platform for India
 
 > **"Self-Drive Freedom Across India • Drive Smarter, Travel Easier."**
 
-**RentaRide** is a full-stack, responsive multi-user vehicle rental management platform tailored for the **Indian automotive and self-drive car rental market**, styled and architected after industry leader **Zoomcar India**.
+**RentaRide** is a full-stack, responsive multi-user vehicle rental management platform tailored for the **Indian automotive and self-drive car rental market**.
 
 Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **PostgreSQL**, **Prisma ORM**, and **Recharts**.
 
@@ -12,16 +12,15 @@ Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Post
 
 ### 1. 100% Self-Drive Passenger Car Fleet
 - **Zero Two-Wheelers & Zero Heavy Commercials**: Purely dedicated to self-drive consumer passenger cars.
-- **5 Zoomcar Categories**:
-  - **Hatchbacks**: Maruti Suzuki Swift ZXi+, Tata Tiago EV Tech Lux
+- **Top Indian Car Segments**:
+  - **Hatchbacks**: Maruti Suzuki Swift ZXi+, Maruti Suzuki Baleno Alpha, Tata Tiago EV Tech Lux
   - **Sedans**: Honda City ZX, Volkswagen Virtus GT Plus DSG
   - **SUVs & 4x4**: Mahindra Thar LX 4x4, Hyundai Creta SX (O), Tata Nexon Fearless+ S, Mahindra Scorpio-N Z8L 4x4, Toyota Fortuner Legender 4x4, Kia Seltos GTX+ Turbo
   - **7-Seaters & MPVs**: Toyota Innova Crysta 2.4 VX
-  - **Luxury Cars**: Mercedes-Benz E-Class E200 Exclusive
 - **Authentic Vehicle Photography**: Every car displays real-world photos matching its exact model, variant, and styling.
-- **Indian RTO Registration Numbers**: Authentic registration plates (`DL 01 AB 4321`, `GA 03 AB 9999`, `HR 26 DQ 8821`, `MH 12 TS 3412`, `KA 04 MP 4455`, etc.).
+- **Indian RTO Registration Numbers**: Authentic registration plates (`DL 01 AB 4321`, `KA 05 MN 3290`, `GA 03 AB 9999`, `MH 12 TS 3412`, `KA 04 MP 4455`, etc.).
 
-### 2. Zoomcar-Inspired Booking Experience
+### 2. Seamless Consumer Booking Experience
 - **Kilometre Packages**:
   - **Commute (120 km/day)**: Economical choice for intra-city meetings & daily chores.
   - **Traveler (300 km/day)**: Ideal for weekend road trips and hill-station getaways.
@@ -29,9 +28,9 @@ Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Post
 - **Delivery Modes**:
   - **Airport / Metro Hub Self-Pickup**: Kempegowda BLR, IGI Delhi T3, CSMIA Mumbai T2, Dabolim Goa, etc.
   - **Doorstep Delivery**: Sanitized car brought straight to residence or hotel (+₹300 flat).
-- **Zoom Shield Protection Plans**:
+- **RentaRide Shield Protection Plans**:
   - **Standard Protection Plan** (Included Free): Damage liability capped at ₹5,000.
-  - **Peace of Mind Plan** (+₹350/day): Complete zero damage liability (₹0 liability) + 24x7 roadside towing.
+  - **Peace of Mind Plan** (+₹299/day): Complete zero damage liability (₹0 liability) + 24x7 roadside towing.
 
 ### 3. Indian Compliance, KYC & Taxation
 - **Aadhaar & PAN Verification**: Secure CRM capture for 12-digit masked Aadhaar and PAN cards.

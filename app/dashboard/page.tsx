@@ -85,7 +85,7 @@ export default function DashboardOverviewPage() {
             Fleet Operations Overview
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Real-time telemetry, Zoomcar-style trip statuses, GST revenue KPIs, and RC/PUC compliance alerts.
+            Real-time telemetry, self-drive trip statuses, GST revenue KPIs, and RC/PUC compliance alerts.
           </p>
         </div>
 

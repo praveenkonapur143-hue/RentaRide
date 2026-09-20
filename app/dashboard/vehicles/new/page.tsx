@@ -26,17 +26,23 @@ export default function NewVehiclePage() {
     insuranceExpiryDate: '',
     registrationExpiryDate: '',
     pollutionExpiryDate: '',
-    imageUrl: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800',
+    imageUrl: '/images/cars/swift.jpg',
     notes: '',
   });
 
   const sampleImages = [
-    { label: 'Hatchback (Swift)', url: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800' },
-    { label: 'Sedan (City)', url: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800' },
-    { label: 'Compact SUV (Creta)', url: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800' },
-    { label: 'Offroad 4x4 (Thar)', url: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800' },
-    { label: '7-Seater MPV (Innova)', url: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800' },
-    { label: 'Luxury Sedan (Mercedes)', url: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800' },
+    { label: 'Maruti Suzuki Swift', url: '/images/cars/swift.jpg' },
+    { label: 'Maruti Suzuki Baleno', url: '/images/cars/baleno.jpg' },
+    { label: 'Mahindra Thar 4x4', url: '/images/cars/thar.jpg' },
+    { label: 'Tata Nexon', url: '/images/cars/nexon.jpg' },
+    { label: 'Toyota Innova Crysta', url: '/images/cars/innova.jpg' },
+    { label: 'Mahindra Scorpio-N', url: '/images/cars/scorpio.jpg' },
+    { label: 'Tata Tiago EV', url: '/images/cars/tiago.jpg' },
+    { label: 'Honda City', url: '/images/cars/city.jpg' },
+    { label: 'Toyota Fortuner Legender', url: '/images/cars/fortuner.jpg' },
+    { label: 'Hyundai Creta', url: '/images/cars/creta.png' },
+    { label: 'Kia Seltos', url: '/images/cars/seltos.jpg' },
+    { label: 'Volkswagen Virtus GT', url: '/images/cars/virtus.png' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -55,7 +55,7 @@ export default function DynamicTripIsland({
         <div className="flex items-center gap-3 min-w-0">
           <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
             <img
-              src={selectedVehicle.images?.[0]?.url || 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=200'}
+              src={selectedVehicle.images?.[0]?.url || '/images/cars/swift.jpg'}
               alt={selectedVehicle.model}
               className="w-full h-full object-cover"
             />

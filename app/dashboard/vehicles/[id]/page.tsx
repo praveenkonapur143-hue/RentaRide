@@ -199,7 +199,7 @@ export default function VehicleDetailPage({ params }: { params: { id: string } }
             <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
               <div className="aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100">
                 <img
-                  src={vehicle.images?.[0]?.url || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800'}
+                  src={vehicle.images?.[0]?.url || '/images/cars/swift.jpg'}
                   alt={vehicle.brand}
                   className="w-full h-full object-cover"
                 />

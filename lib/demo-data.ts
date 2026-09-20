@@ -237,20 +237,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 5,
     dailyPrice: 1800,
     hourlyRate: 75,
-    securityDeposit: 3000,
+    securityDeposit: 2000,
     odometerReading: 14200,
     status: 'AVAILABLE',
-    rating: 4.85,
+    rating: 4.88,
     tripsCount: 142,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-04-15',
     registrationExpiryDate: '2027-05-20',
     pollutionExpiryDate: '2026-11-10',
-    notes: 'SmartPlay Pro+ touchscreen, Cruise Control, Reverse Camera, FASTag active.',
+    notes: 'SmartPlay Pro+ touchscreen, 24.8 km/l mileage, Cruise Control, Reverse Camera, FASTag active.',
     isArchived: false,
     createdAt: '2025-01-15T08:00:00.000Z',
     images: [
-      { id: 'img-1', url: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800', caption: 'Maruti Suzuki Swift Red Hatchback', isPrimary: true },
+      { id: 'img-1', url: '/images/cars/swift.jpg', caption: 'Maruti Suzuki Swift ZXi+ Red Hatchback', isPrimary: true },
     ],
     documents: [
       { id: 'doc-1', name: 'Comprehensive Insurance Policy', documentType: 'Insurance', fileUrl: '/docs/swift_insurance.pdf', expiryDate: '2027-04-15' },
@@ -259,33 +259,33 @@ export const initialVehicles: DemoVehicle[] = [
   },
   {
     id: 'veh-02',
-    registrationNumber: 'HR 26 DQ 8821',
-    type: 'SUV',
-    brand: 'Hyundai',
-    model: 'Creta SX (O)',
+    registrationNumber: 'KA 05 MN 3290',
+    type: 'HATCHBACK',
+    brand: 'Maruti Suzuki',
+    model: 'Baleno Alpha',
     year: 2024,
-    fuelType: 'DIESEL',
-    transmission: 'AUTOMATIC',
+    fuelType: 'PETROL',
+    transmission: 'MANUAL',
     seatingCapacity: 5,
-    dailyPrice: 3400,
-    hourlyRate: 140,
-    securityDeposit: 5000,
-    odometerReading: 18600,
-    status: 'RENTED',
-    rating: 4.92,
-    tripsCount: 198,
+    dailyPrice: 2100,
+    hourlyRate: 90,
+    securityDeposit: 2500,
+    odometerReading: 11500,
+    status: 'AVAILABLE',
+    rating: 4.89,
+    tripsCount: 130,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-06-10',
     registrationExpiryDate: '2027-08-15',
     pollutionExpiryDate: '2027-08-15',
-    notes: 'Panoramic Sunroof, Bose 8-Speaker Audio, Ventilated Front Seats, Level 2 ADAS.',
+    notes: 'Head-up Display (HUD), 360 View Camera, 9-inch SmartPlay Pro+, 6 airbags, Arkamys Surround Sound.',
     isArchived: false,
     createdAt: '2025-02-01T09:00:00.000Z',
     images: [
-      { id: 'img-3', url: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800', caption: 'Hyundai Creta Modern White SUV', isPrimary: true },
+      { id: 'img-2', url: '/images/cars/baleno.jpg', caption: 'Maruti Suzuki Baleno Alpha Premium Hatchback', isPrimary: true },
     ],
     documents: [
-      { id: 'doc-3', name: 'HDFC ERGO Comprehensive Cover', documentType: 'Insurance', fileUrl: '/docs/creta_insurance.pdf', expiryDate: '2027-06-10' }
+      { id: 'doc-baleno-1', name: 'Comprehensive Insurance Policy', documentType: 'Insurance', fileUrl: '/docs/baleno_insurance.pdf', expiryDate: '2027-06-10' }
     ]
   },
   {
@@ -300,20 +300,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 4,
     dailyPrice: 4500,
     hourlyRate: 190,
-    securityDeposit: 8000,
+    securityDeposit: 5000,
     odometerReading: 12400,
-    status: 'BOOKED',
+    status: 'AVAILABLE',
     rating: 4.97,
     tripsCount: 215,
     fastagEnabled: true,
     insuranceExpiryDate: '2026-10-30',
     registrationExpiryDate: '2026-11-25',
     pollutionExpiryDate: '2026-10-15',
-    notes: 'Iconic 4x4 off-road transfer case, convertible hard-top, all-terrain AT tyres, rugged sound bar.',
+    notes: 'Iconic 4x4 off-road transfer case, convertible hard-top, all-terrain AT tyres, rugged sound bar, 226mm ground clearance.',
     isArchived: false,
     createdAt: '2025-01-20T10:00:00.000Z',
     images: [
-      { id: 'img-4', url: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800', caption: 'Mahindra Thar Rugged 4x4 Offroader', isPrimary: true }
+      { id: 'img-3', url: '/images/cars/thar.jpg', caption: 'Mahindra Thar LX Hard Top 4x4 Offroader', isPrimary: true }
     ],
     documents: []
   },
@@ -329,7 +329,7 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 5,
     dailyPrice: 2600,
     hourlyRate: 110,
-    securityDeposit: 4000,
+    securityDeposit: 3000,
     odometerReading: 22100,
     status: 'AVAILABLE',
     rating: 4.88,
@@ -338,11 +338,11 @@ export const initialVehicles: DemoVehicle[] = [
     insuranceExpiryDate: '2027-01-18',
     registrationExpiryDate: '2027-02-28',
     pollutionExpiryDate: '2027-01-18',
-    notes: '5-Star Global NCAP safety rating, JBL 9-speaker system, wireless charger, ventilated seats.',
+    notes: '5-Star Global NCAP safety rating, JBL 9-speaker system, sequential LED DRLs, wireless charging, ventilated seats.',
     isArchived: false,
     createdAt: '2025-01-25T11:00:00.000Z',
     images: [
-      { id: 'img-5', url: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800', caption: 'Tata Nexon Compact Crossover SUV', isPrimary: true }
+      { id: 'img-4', url: '/images/cars/nexon.jpg', caption: 'Tata Nexon Fearless+ S Compact SUV', isPrimary: true }
     ],
     documents: []
   },
@@ -358,20 +358,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 7,
     dailyPrice: 4200,
     hourlyRate: 175,
-    securityDeposit: 7000,
+    securityDeposit: 5000,
     odometerReading: 45200,
     status: 'AVAILABLE',
-    rating: 4.93,
+    rating: 4.95,
     tripsCount: 310,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-09-01',
     registrationExpiryDate: '2027-09-15',
     pollutionExpiryDate: '2027-09-01',
-    notes: 'Captain chairs, massive 7-passenger capacity, rear automatic AC, supreme highway touring comfort.',
+    notes: 'Captain chairs, massive 7-passenger capacity, rear automatic AC, supreme highway touring comfort, bulletproof reliability.',
     isArchived: false,
     createdAt: '2025-02-10T12:00:00.000Z',
     images: [
-      { id: 'img-6', url: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800', caption: 'Toyota Innova Crysta 7-Seater Family Tourer', isPrimary: true }
+      { id: 'img-5', url: '/images/cars/innova.jpg', caption: 'Toyota Innova Crysta 2.4 VX 7-Seater Family Tourer', isPrimary: true }
     ],
     documents: []
   },
@@ -387,20 +387,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 7,
     dailyPrice: 4800,
     hourlyRate: 200,
-    securityDeposit: 8000,
+    securityDeposit: 6000,
     odometerReading: 16800,
     status: 'AVAILABLE',
-    rating: 4.91,
+    rating: 4.93,
     tripsCount: 122,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-03-22',
     registrationExpiryDate: '2027-04-30',
     pollutionExpiryDate: '2027-03-22',
-    notes: 'Sony 3D Immersive audio with 12 speakers, 4XPLOR terrain modes, 7 seats, muscular road presence.',
+    notes: 'Sony 3D Immersive audio with 12 speakers, 4XPLOR terrain modes, 7 seats, muscular road presence, shift-on-fly 4WD.',
     isArchived: false,
     createdAt: '2025-01-05T09:00:00.000Z',
     images: [
-      { id: 'img-7', url: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800', caption: 'Mahindra Scorpio-N Black Edition 7-Seater SUV', isPrimary: true }
+      { id: 'img-6', url: '/images/cars/scorpio.jpg', caption: 'Mahindra Scorpio-N Z8L 4x4 7-Seater SUV', isPrimary: true }
     ],
     documents: []
   },
@@ -416,20 +416,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 5,
     dailyPrice: 1900,
     hourlyRate: 80,
-    securityDeposit: 3000,
+    securityDeposit: 2500,
     odometerReading: 9200,
     status: 'AVAILABLE',
-    rating: 4.79,
+    rating: 4.82,
     tripsCount: 89,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-11-10',
     registrationExpiryDate: '2027-12-05',
     pollutionExpiryDate: '2027-11-10',
-    notes: '24 kWh IP67 battery, 315 km MIDC range, connected car telematics, fast CCS2 charging ready.',
+    notes: '24 kWh IP67 battery, 315 km MIDC range, multi-mode regen, connected car telematics, fast CCS2 charging ready.',
     isArchived: false,
     createdAt: '2025-02-14T08:00:00.000Z',
     images: [
-      { id: 'img-8', url: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800', caption: 'Tata Tiago EV Electric Blue Hatchback', isPrimary: true }
+      { id: 'img-7', url: '/images/cars/tiago.jpg', caption: 'Tata Tiago EV Electric Hatchback', isPrimary: true }
     ],
     documents: []
   },
@@ -445,20 +445,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 5,
     dailyPrice: 3200,
     hourlyRate: 130,
-    securityDeposit: 5000,
+    securityDeposit: 4000,
     odometerReading: 19400,
     status: 'AVAILABLE',
-    rating: 4.89,
+    rating: 4.91,
     tripsCount: 176,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-02-19',
     registrationExpiryDate: '2027-03-25',
     pollutionExpiryDate: '2027-02-19',
-    notes: '1.5L i-VTEC engine, Honda SENSING ADAS suite, plush leather upholstery, electric sunroof.',
+    notes: '1.5L i-VTEC engine, Honda SENSING ADAS suite, plush leather upholstery, electric sunroof, LaneWatch blind spot camera.',
     isArchived: false,
     createdAt: '2025-01-28T10:00:00.000Z',
     images: [
-      { id: 'img-9', url: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800', caption: 'Honda City White Pearl Executive Sedan', isPrimary: true }
+      { id: 'img-8', url: '/images/cars/city.jpg', caption: 'Honda City ZX i-VTEC Executive Sedan', isPrimary: true }
     ],
     documents: []
   },
@@ -474,7 +474,7 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 7,
     dailyPrice: 8500,
     hourlyRate: 350,
-    securityDeposit: 20000,
+    securityDeposit: 15000,
     odometerReading: 24000,
     status: 'AVAILABLE',
     rating: 4.98,
@@ -483,16 +483,47 @@ export const initialVehicles: DemoVehicle[] = [
     insuranceExpiryDate: '2027-05-02',
     registrationExpiryDate: '2027-06-15',
     pollutionExpiryDate: '2027-05-02',
-    notes: '2.8L turbo-diesel 500Nm torque, dual-tone roof, kick-sensor powered tailgate, VIP road presence.',
+    notes: '2.8L turbo-diesel 500Nm torque, dual-tone roof, kick-sensor powered tailgate, VIP road presence, paddle shifters.',
     isArchived: false,
     createdAt: '2025-02-25T11:00:00.000Z',
     images: [
-      { id: 'img-10', url: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800', caption: 'Toyota Fortuner Legender 4x4 SUV', isPrimary: true }
+      { id: 'img-9', url: '/images/cars/fortuner.jpg', caption: 'Toyota Fortuner Legender 4x4 Luxury SUV', isPrimary: true }
     ],
     documents: []
   },
   {
     id: 'veh-10',
+    registrationNumber: 'HR 26 DQ 8821',
+    type: 'SUV',
+    brand: 'Hyundai',
+    model: 'Creta SX (O)',
+    year: 2024,
+    fuelType: 'DIESEL',
+    transmission: 'AUTOMATIC',
+    seatingCapacity: 5,
+    dailyPrice: 3400,
+    hourlyRate: 140,
+    securityDeposit: 4000,
+    odometerReading: 18600,
+    status: 'AVAILABLE',
+    rating: 4.92,
+    tripsCount: 198,
+    fastagEnabled: true,
+    insuranceExpiryDate: '2027-06-10',
+    registrationExpiryDate: '2027-08-15',
+    pollutionExpiryDate: '2027-08-15',
+    notes: 'Panoramic Sunroof, Bose 8-Speaker Audio, Ventilated Front Seats, Level 2 ADAS, dual-zone climate control.',
+    isArchived: false,
+    createdAt: '2025-02-01T09:00:00.000Z',
+    images: [
+      { id: 'img-10', url: '/images/cars/creta.png', caption: 'Hyundai Creta SX (O) Midsize SUV', isPrimary: true },
+    ],
+    documents: [
+      { id: 'doc-3', name: 'HDFC ERGO Comprehensive Cover', documentType: 'Insurance', fileUrl: '/docs/creta_insurance.pdf', expiryDate: '2027-06-10' }
+    ]
+  },
+  {
+    id: 'veh-11',
     registrationNumber: 'DL 09 PQ 4040',
     type: 'SUV',
     brand: 'Kia',
@@ -503,7 +534,7 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 5,
     dailyPrice: 3500,
     hourlyRate: 145,
-    securityDeposit: 5000,
+    securityDeposit: 4000,
     odometerReading: 15400,
     status: 'AVAILABLE',
     rating: 4.93,
@@ -516,12 +547,12 @@ export const initialVehicles: DemoVehicle[] = [
     isArchived: false,
     createdAt: '2025-02-18T10:00:00.000Z',
     images: [
-      { id: 'img-11', url: 'https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800', caption: 'Kia Seltos GTX+ Modern Urban SUV', isPrimary: true }
+      { id: 'img-11', url: '/images/cars/seltos.jpg', caption: 'Kia Seltos GTX+ Turbo Urban SUV', isPrimary: true }
     ],
     documents: []
   },
   {
-    id: 'veh-11',
+    id: 'veh-12',
     registrationNumber: 'MH 14 GT 9988',
     type: 'SEDAN',
     brand: 'Volkswagen',
@@ -532,49 +563,20 @@ export const initialVehicles: DemoVehicle[] = [
     seatingCapacity: 5,
     dailyPrice: 3300,
     hourlyRate: 135,
-    securityDeposit: 5000,
+    securityDeposit: 4000,
     odometerReading: 13800,
     status: 'AVAILABLE',
-    rating: 4.91,
+    rating: 4.94,
     tripsCount: 135,
     fastagEnabled: true,
     insuranceExpiryDate: '2027-07-22',
     registrationExpiryDate: '2027-08-30',
     pollutionExpiryDate: '2027-07-22',
-    notes: '1.5L TSI EVO engine with Active Cylinder Tech, 7-speed DSG, 521-litre boot, 5-Star Global NCAP.',
+    notes: '1.5L TSI EVO engine with Active Cylinder Tech, 7-speed DSG, 521-litre boot, 5-Star Global NCAP safety.',
     isArchived: false,
     createdAt: '2025-01-14T09:00:00.000Z',
     images: [
-      { id: 'img-12', url: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800', caption: 'Volkswagen Virtus GT Red Sports Sedan', isPrimary: true }
-    ],
-    documents: []
-  },
-  {
-    id: 'veh-12',
-    registrationNumber: 'DL 01 AA 0007',
-    type: 'LUXURY',
-    brand: 'Mercedes-Benz',
-    model: 'E-Class E200 Exclusive',
-    year: 2024,
-    fuelType: 'PETROL',
-    transmission: 'AUTOMATIC',
-    seatingCapacity: 5,
-    dailyPrice: 16500,
-    hourlyRate: 700,
-    securityDeposit: 35000,
-    odometerReading: 11200,
-    status: 'AVAILABLE',
-    rating: 4.96,
-    tripsCount: 64,
-    fastagEnabled: true,
-    insuranceExpiryDate: '2027-09-10',
-    registrationExpiryDate: '2027-10-01',
-    pollutionExpiryDate: '2027-09-10',
-    notes: 'Long wheelbase luxury sedan, reclining rear seats with memory, Burmester surround sound, panoramic sunroof.',
-    isArchived: false,
-    createdAt: '2025-02-12T12:00:00.000Z',
-    images: [
-      { id: 'img-13', url: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800', caption: 'Mercedes-Benz E-Class Luxury Executive Sedan', isPrimary: true }
+      { id: 'img-12', url: '/images/cars/virtus.png', caption: 'Volkswagen Virtus GT Plus DSG Turbo Sedan', isPrimary: true }
     ],
     documents: []
   },
@@ -972,7 +974,7 @@ export const initialInspections: DemoInspection[] = [
     inspectionDate: '2026-09-18T10:15:00.000Z',
     notes: 'FASTag checked (₹500 active balance), clean interior, spare wheel & toolkit verified.',
     photos: [
-      { id: 'ph-1', photoUrl: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800', caption: 'Front 360 Exterior', area: 'FRONT' }
+      { id: 'ph-1', photoUrl: '/images/cars/thar.jpg', caption: 'Front 360 Exterior', area: 'FRONT' }
     ],
     createdAt: '2026-09-18T10:15:00.000Z'
   },

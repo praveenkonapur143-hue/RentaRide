@@ -68,17 +68,17 @@ const STUDIO_CARS: StudioCar[] = [
       {
         label: 'Front 3/4 Stance',
         description: 'Iconic vertical-slat grille with round retro headlamps and flared wheel arches.',
-        imageUrl: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1000'
+        imageUrl: '/images/cars/thar.jpg'
       },
       {
         label: 'Cockpit View',
         description: 'Drizzle-resistant IP54 rated dashboard with real-time pitch & roll angle gauges.',
-        imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000'
+        imageUrl: '/images/cars/thar.jpg'
       },
       {
         label: 'Trail Offroad',
         description: 'Shift-on-the-fly mechanical 4WD transfer case with 4L crawl gear ratio.',
-        imageUrl: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1000'
+        imageUrl: '/images/cars/thar.jpg'
       }
     ]
   },
@@ -106,22 +106,22 @@ const STUDIO_CARS: StudioCar[] = [
       {
         label: 'Front 3/4 Stance',
         description: 'Catamaran-style aerodynamic front bumper with sequential LED turn lamps.',
-        imageUrl: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=1000'
+        imageUrl: '/images/cars/fortuner.jpg'
       },
       {
         label: 'Executive Cabin',
         description: 'Perforated maroon-black dual tone leather seats with wireless inductive charging.',
-        imageUrl: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=1000'
+        imageUrl: '/images/cars/fortuner.jpg'
       },
       {
         label: 'Highway Presence',
         description: 'Massive 18-inch multi-spoke precision cut alloys and illuminated scuff plates.',
-        imageUrl: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=1000'
+        imageUrl: '/images/cars/fortuner.jpg'
       }
     ]
   },
   {
-    id: 'veh-02',
+    id: 'veh-10',
     brand: 'Hyundai',
     model: 'Creta SX (O) Turbo',
     category: 'Compact SUV',
@@ -145,22 +145,22 @@ const STUDIO_CARS: StudioCar[] = [
       {
         label: 'Front 3/4 Stance',
         description: 'Parametric dark chrome radiator grille with connecting horizon LED lightbar.',
-        imageUrl: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=1000'
+        imageUrl: '/images/cars/creta.png'
       },
       {
         label: 'Panoramic Cockpit',
         description: 'Dual 10.25-inch infotainment with ventilated cooling seats and voice sunroof.',
-        imageUrl: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1000'
+        imageUrl: '/images/cars/creta.png'
       },
       {
         label: 'Night LED Stance',
         description: 'Connected LED tail lamps with integrated high-mount stop light spoiler.',
-        imageUrl: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=1000'
+        imageUrl: '/images/cars/creta.png'
       }
     ]
   },
   {
-    id: 'veh-11',
+    id: 'veh-12',
     brand: 'Volkswagen',
     model: 'Virtus GT Plus DSG',
     category: 'Sedan',
@@ -184,17 +184,17 @@ const STUDIO_CARS: StudioCar[] = [
       {
         label: 'Front 3/4 Stance',
         description: 'GT badged honeycomb air dams with smoked LED headlights and red brake calipers.',
-        imageUrl: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=1000'
+        imageUrl: '/images/cars/virtus.png'
       },
       {
         label: 'Virtual Cockpit',
         description: '10-inch digital cockpit with paddle shifters and cylinder-deactivation tech display.',
-        imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000'
+        imageUrl: '/images/cars/virtus.png'
       },
       {
         label: 'Rear Stance',
         description: 'Gloss black boot-lid spoiler with dual-tone bumper diffuser and shark-fin antenna.',
-        imageUrl: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=1000'
+        imageUrl: '/images/cars/virtus.png'
       }
     ]
   },
@@ -223,17 +223,17 @@ const STUDIO_CARS: StudioCar[] = [
       {
         label: 'Front 3/4 Stance',
         description: 'Floating roof design with wraparound precision cut alloys and LED DRLs.',
-        imageUrl: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=1000'
+        imageUrl: '/images/cars/swift.jpg'
       },
       {
         label: 'Driver Cockpit',
         description: 'Driver-centric center console with SmartPlay Pro+ and automatic climate control.',
-        imageUrl: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1000'
+        imageUrl: '/images/cars/swift.jpg'
       },
       {
         label: 'Side Profile',
         description: 'Compact 3.86m footprint easy to zip through Delhi, Bengaluru & Mumbai traffic.',
-        imageUrl: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=1000'
+        imageUrl: '/images/cars/swift.jpg'
       }
     ]
   }
