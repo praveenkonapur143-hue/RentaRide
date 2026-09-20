@@ -1,0 +1,420 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum VehicleType {
+  CAR
+  BIKE
+  SUV
+  VAN
+  LUXURY
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  ELECTRIC
+  HYBRID
+}
+
+enum TransmissionType {
+  AUTOMATIC
+  MANUAL
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  BOOKED
+  RENTED
+  UNDER_MAINTENANCE
+  ARCHIVED
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  ACTIVE_RENTAL
+  COMPLETED
+  CANCELLED
+  OVERDUE
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  UPI
+  BANK_TRANSFER
+  ONLINE
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  REFUNDED
+  FAILED
+}
+
+enum InspectionType {
+  CHECK_OUT
+  RETURN
+}
+
+enum DamageSeverity {
+  MINOR
+  MODERATE
+  SEVERE
+}
+
+enum RepairStatus {
+  PENDING
+  UNDER_REPAIR
+  REPAIRED
+}
+
+enum ResponsibilityStatus {
+  CUSTOMER
+  BUSINESS
+  THIRD_PARTY
+  INSURANCE
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ALERT
+  SUCCESS
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  role         Role       @default(STAFF)
+  phone        String?
+  avatar       String?
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  bookings     Booking[]  @relation("ManagedByUser")
+  inspections  Inspection[]
+  auditLogs    AuditLog[]
+  notifications Notification[]
+}
+
+model Customer {
+  id                   String         @id @default(uuid())
+  fullName             String
+  email                String         @unique
+  phone                String
+  address              String?
+  dob                  DateTime?
+  drivingLicenceNumber String         @unique
+  licenceExpiryDate    DateTime?
+  governmentIdNumber   String?
+  idDocumentUrl        String?
+  licenceDocumentUrl   String?
+  status               CustomerStatus @default(ACTIVE)
+  notes                String?
+  isArchived           Boolean        @default(false)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  bookings             Booking[]
+  payments             Payment[]
+  invoices             Invoice[]
+  damageReports        DamageReport[]
+}
+
+model Vehicle {
+  id                     String           @id @default(uuid())
+  registrationNumber     String           @unique
+  type                   VehicleType      @default(CAR)
+  brand                  String
+  model                  String
+  year                   Int
+  fuelType               FuelType         @default(PETROL)
+  transmission           TransmissionType @default(AUTOMATIC)
+  seatingCapacity        Int              @default(5)
+  dailyPrice             Float
+  securityDeposit        Float            @default(200)
+  odometerReading        Int              @default(0)
+  status                 VehicleStatus    @default(AVAILABLE)
+  insuranceExpiryDate    DateTime?
+  registrationExpiryDate DateTime?
+  pollutionExpiryDate    DateTime?
+  notes                  String?
+  isArchived             Boolean          @default(false)
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  images                 VehicleImage[]
+  documents              VehicleDocument[]
+  bookings               Booking[]
+  inspections            Inspection[]
+  damageReports          DamageReport[]
+  maintenanceRecords     MaintenanceRecord[]
+}
+
+model VehicleImage {
+  id        String   @id @default(uuid())
+  vehicleId String
+  url       String
+  caption   String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model VehicleDocument {
+  id           String    @id @default(uuid())
+  vehicleId    String
+  name         String
+  documentType String
+  fileUrl      String
+  expiryDate   DateTime?
+  createdAt    DateTime  @default(now())
+
+  vehicle      Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id                 String         @id @default(uuid())
+  bookingNumber      String         @unique
+  customerId         String
+  vehicleId          String
+  managedById        String?
+  pickupLocation     String
+  dropoffLocation    String
+  pickupDate         DateTime
+  returnDate         DateTime
+  actualReturnDate   DateTime?
+  dailyRate          Float
+  days               Int
+  securityDeposit    Float          @default(0)
+  discount           Float          @default(0)
+  taxRate            Float          @default(10)
+  taxAmount          Float          @default(0)
+  totalAmount        Float
+  advancePayment     Float          @default(0)
+  balanceAmount      Float
+  status             BookingStatus  @default(PENDING)
+  cancellationReason String?
+  cancelledAt        DateTime?
+  notes              String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  customer           Customer       @relation(fields: [customerId], references: [id])
+  vehicle            Vehicle        @relation(fields: [vehicleId], references: [id])
+  managedBy          User?          @relation("ManagedByUser", fields: [managedById], references: [id])
+  rentalAgreement    RentalAgreement?
+  invoice            Invoice?
+  payments           Payment[]
+  inspections        Inspection[]
+  damageReports      DamageReport[]
+}
+
+model RentalAgreement {
+  id                String    @id @default(uuid())
+  bookingId         String    @unique
+  agreementNumber   String    @unique
+  terms             String
+  signedAt          DateTime  @default(now())
+  customerSignature String
+  staffSignature    String?
+  createdAt         DateTime  @default(now())
+
+  booking           Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id                   String        @id @default(uuid())
+  paymentNumber        String        @unique
+  bookingId            String
+  customerId           String
+  amount               Float
+  paymentMethod        PaymentMethod @default(CARD)
+  paymentStatus        PaymentStatus @default(PAID)
+  transactionReference String?
+  notes                String?
+  paymentDate          DateTime      @default(now())
+  createdAt            DateTime      @default(now())
+
+  booking              Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customer             Customer      @relation(fields: [customerId], references: [id])
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  invoiceNumber  String        @unique
+  bookingId      String        @unique
+  customerId     String
+  issueDate      DateTime      @default(now())
+  dueDate        DateTime
+  subtotal       Float
+  taxAmount      Float
+  discountAmount Float         @default(0)
+  lateFees       Float         @default(0)
+  damageFees     Float         @default(0)
+  totalAmount    Float
+  paidAmount     Float         @default(0)
+  balanceDue     Float
+  status         PaymentStatus @default(PENDING)
+  notes          String?
+  createdAt      DateTime      @default(now())
+
+  booking        Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customer       Customer      @relation(fields: [customerId], references: [id])
+}
+
+model Inspection {
+  id                 String          @id @default(uuid())
+  bookingId          String
+  vehicleId          String
+  staffId            String?
+  type               InspectionType
+  odometerReading    Int
+  fuelLevel          String          // e.g. "100%", "75%", "50%", "25%"
+  exteriorCondition  String          // "EXCELLENT", "GOOD", "FAIR", "POOR"
+  interiorCondition  String          // "CLEAN", "NEEDS_CLEANING", "STAINED"
+  tyresCondition     String          // "GOOD", "WORN", "NEEDS_REPLACEMENT"
+  lightsCondition    String          // "FUNCTIONAL", "DEFECTIVE"
+  mirrorsCondition   String          // "INTACT", "DAMAGED"
+  existingDamage     String?
+  newDamage          String?
+  customerSignature  String?
+  staffName          String
+  inspectionDate     DateTime        @default(now())
+  notes              String?
+  createdAt          DateTime        @default(now())
+
+  booking            Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  vehicle            Vehicle         @relation(fields: [vehicleId], references: [id])
+  staff              User?           @relation(fields: [staffId], references: [id])
+  photos             InspectionPhoto[]
+}
+
+model InspectionPhoto {
+  id           String     @id @default(uuid())
+  inspectionId String
+  photoUrl     String
+  caption      String?
+  area         String?    // "FRONT", "REAR", "LEFT_SIDE", "RIGHT_SIDE", "INTERIOR", "ROOF"
+  createdAt    DateTime   @default(now())
+
+  inspection   Inspection @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+}
+
+model DamageReport {
+  id             String               @id @default(uuid())
+  reportNumber   String               @unique
+  bookingId      String
+  vehicleId      String
+  customerId     String
+  damageType     String               // "SCRATCH", "DENT", "COLLISION", "INTERIOR_TEAR", "GLASS_CRACK", "OTHER"
+  description    String
+  severity       DamageSeverity       @default(MINOR)
+  estimatedCost  Float                @default(0)
+  finalCharge    Float                @default(0)
+  repairStatus   RepairStatus         @default(PENDING)
+  responsibility ResponsibilityStatus @default(CUSTOMER)
+  beforePhotos   String?              // JSON array string of photo URLs
+  afterPhotos    String?              // JSON array string of photo URLs
+  notes          String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  booking        Booking              @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  vehicle        Vehicle              @relation(fields: [vehicleId], references: [id])
+  customer       Customer             @relation(fields: [customerId], references: [id])
+}
+
+model MaintenanceRecord {
+  id              String            @id @default(uuid())
+  vehicleId       String
+  maintenanceType String            // "ROUTINE_SERVICE", "OIL_CHANGE", "BRAKE_SERVICE", "TYRE_REPLACEMENT", "ENGINE_REPAIR", "BODYWORK", "OTHER"
+  serviceDate     DateTime
+  nextServiceDate DateTime?
+  cost            Float
+  odometerReading Int
+  serviceProvider String
+  description     String
+  invoiceUrl      String?
+  status          MaintenanceStatus @default(COMPLETED)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  vehicle         Vehicle           @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String?
+  title     String
+  message   String
+  type      NotificationType @default(INFO)
+  isRead    Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  user      User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BusinessSettings {
+  id                 String   @id @default(uuid())
+  businessName       String   @default("RentaRide")
+  tagline            String   @default("Rent smarter. Drive easier.")
+  logoUrl            String?
+  email              String   @default("contact@rentaride.com")
+  phone              String   @default("+1 (800) 555-RIDE")
+  address            String   @default("100 Mobility Boulevard, San Francisco, CA 94105")
+  currency           String   @default("USD")
+  taxRate            Float    @default(10.0)
+  lateFeePerHour     Float    @default(15.0)
+  lateFeePerDay      Float    @default(75.0)
+  defaultDeposit     Float    @default(250.0)
+  rentalPolicy       String   @default("Valid driver's license required. Minimum age 21.")
+  cancellationPolicy String   @default("Full refund up to 24 hours before scheduled pickup.")
+  termsAndConditions String   @default("Standard vehicle rental agreement and liability coverage.")
+  updatedAt          DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String   // e.g. "CREATE_BOOKING", "RETURN_VEHICLE", "UPDATE_SETTINGS"
+  entityType String   // "BOOKING", "VEHICLE", "CUSTOMER", "PAYMENT", "INSPECTION"
+  entityId   String?
+  details    String?  // JSON formatted details
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
