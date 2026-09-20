@@ -63,7 +63,7 @@ export function Sidebar({ userRole = 'ADMIN', isOpen = false, onClose }: Sidebar
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800 bg-slate-950">
           <Link href="/dashboard" className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-700 to-emerald-500 flex items-center justify-center text-white font-black text-lg shadow-md shadow-emerald-500/20">
-              Z
+              R
             </div>
             <div>
               <span className="font-extrabold text-lg text-white tracking-tight">RentaRide</span>

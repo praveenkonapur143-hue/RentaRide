@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Car, Upload, Save, Check } from 'lucide-react';
+import { ArrowLeft, Car, Upload, Save, Check, Sparkles, FileImage, Image as ImageIcon, X } from 'lucide-react';
 
 export default function NewVehiclePage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageLoadError, setImageLoadError] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [formData, setFormData] = useState({
     registrationNumber: '',
@@ -31,19 +34,62 @@ export default function NewVehiclePage() {
   });
 
   const sampleImages = [
-    { label: 'Maruti Suzuki Swift', url: '/images/cars/swift.jpg' },
-    { label: 'Maruti Suzuki Baleno', url: '/images/cars/baleno.jpg' },
-    { label: 'Mahindra Thar 4x4', url: '/images/cars/thar.jpg' },
-    { label: 'Tata Nexon', url: '/images/cars/nexon.jpg' },
-    { label: 'Toyota Innova Crysta', url: '/images/cars/innova.jpg' },
-    { label: 'Mahindra Scorpio-N', url: '/images/cars/scorpio.jpg' },
-    { label: 'Tata Tiago EV', url: '/images/cars/tiago.jpg' },
-    { label: 'Honda City', url: '/images/cars/city.jpg' },
-    { label: 'Toyota Fortuner Legender', url: '/images/cars/fortuner.jpg' },
-    { label: 'Hyundai Creta', url: '/images/cars/creta.png' },
-    { label: 'Kia Seltos', url: '/images/cars/seltos.jpg' },
-    { label: 'Volkswagen Virtus GT', url: '/images/cars/virtus.png' },
+    { label: 'BMW M4 Competition', url: '/images/cars/bmw-m4.jpg', brand: 'BMW', model: 'M4 Competition Coupé', type: 'LUXURY', fuelType: 'PETROL', transmission: 'AUTOMATIC', dailyPrice: 18500, securityDeposit: 35000 },
+    { label: 'BMW M4 (/BMW4.jpg)', url: '/images/cars/BMW4.jpg', brand: 'BMW', model: 'M4 Competition M xDrive', type: 'LUXURY', fuelType: 'PETROL', transmission: 'AUTOMATIC', dailyPrice: 18500, securityDeposit: 35000 },
+    { label: 'Mahindra Thar 4x4', url: '/images/cars/thar.jpg', brand: 'Mahindra', model: 'Thar LX Hard Top 4x4', type: 'SUV', fuelType: 'DIESEL', transmission: 'MANUAL', dailyPrice: 4500, securityDeposit: 5000 },
+    { label: 'Toyota Fortuner Legender', url: '/images/cars/fortuner.jpg', brand: 'Toyota', model: 'Fortuner Legender 4x4', type: 'SUV', fuelType: 'DIESEL', transmission: 'AUTOMATIC', dailyPrice: 8500, securityDeposit: 15000 },
+    { label: 'Maruti Suzuki Swift', url: '/images/cars/swift.jpg', brand: 'Maruti Suzuki', model: 'Swift ZXi+', type: 'HATCHBACK', fuelType: 'PETROL', transmission: 'MANUAL', dailyPrice: 1800, securityDeposit: 2000 },
+    { label: 'Maruti Suzuki Baleno', url: '/images/cars/baleno.jpg', brand: 'Maruti Suzuki', model: 'Baleno Alpha', type: 'HATCHBACK', fuelType: 'PETROL', transmission: 'MANUAL', dailyPrice: 2100, securityDeposit: 2500 },
+    { label: 'Toyota Innova Crysta', url: '/images/cars/innova.jpg', brand: 'Toyota', model: 'Innova Crysta 2.4 VX', type: 'MPV', fuelType: 'DIESEL', transmission: 'MANUAL', dailyPrice: 4200, securityDeposit: 5000 },
+    { label: 'Tata Nexon', url: '/images/cars/nexon.jpg', brand: 'Tata', model: 'Nexon Fearless+ S', type: 'SUV', fuelType: 'PETROL', transmission: 'AUTOMATIC', dailyPrice: 2600, securityDeposit: 3000 },
+    { label: 'Mahindra Scorpio-N', url: '/images/cars/scorpio.jpg', brand: 'Mahindra', model: 'Scorpio-N Z8L 4x4', type: 'SUV', fuelType: 'DIESEL', transmission: 'AUTOMATIC', dailyPrice: 4800, securityDeposit: 6000 },
+    { label: 'Honda City', url: '/images/cars/city.jpg', brand: 'Honda', model: 'City ZX i-VTEC', type: 'SEDAN', fuelType: 'PETROL', transmission: 'AUTOMATIC', dailyPrice: 3200, securityDeposit: 4000 },
+    { label: 'Hyundai Creta', url: '/images/cars/creta.png', brand: 'Hyundai', model: 'Creta SX (O)', type: 'SUV', fuelType: 'DIESEL', transmission: 'AUTOMATIC', dailyPrice: 3400, securityDeposit: 4000 },
+    { label: 'Kia Seltos', url: '/images/cars/seltos.jpg', brand: 'Kia', model: 'Seltos GTX+ Turbo', type: 'SUV', fuelType: 'PETROL', transmission: 'AUTOMATIC', dailyPrice: 3500, securityDeposit: 4000 },
+    { label: 'Volkswagen Virtus GT', url: '/images/cars/virtus.png', brand: 'Volkswagen', model: 'Virtus GT Plus DSG', type: 'SEDAN', fuelType: 'PETROL', transmission: 'AUTOMATIC', dailyPrice: 3300, securityDeposit: 4000 },
+    { label: 'Tata Tiago EV', url: '/images/cars/tiago.jpg', brand: 'Tata', model: 'Tiago EV Tech Lux', type: 'HATCHBACK', fuelType: 'ELECTRIC', transmission: 'AUTOMATIC', dailyPrice: 1900, securityDeposit: 2500 },
   ];
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file (JPG, PNG, WEBP)');
+      return;
+    }
+
+    setUploadingImage(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      if (base64) {
+        setFormData(prev => ({ ...prev, imageUrl: base64 }));
+        setImageLoadError(false);
+      }
+      setUploadingImage(false);
+    };
+    reader.onerror = () => {
+      setError('Failed to read image file');
+      setUploadingImage(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const applyPreset = (preset: typeof sampleImages[0]) => {
+    setFormData(prev => ({
+      ...prev,
+      imageUrl: preset.url,
+      brand: prev.brand || preset.brand,
+      model: prev.model || preset.model,
+      type: preset.type || prev.type,
+      fuelType: preset.fuelType || prev.fuelType,
+      transmission: preset.transmission || prev.transmission,
+      dailyPrice: prev.dailyPrice === 2499 ? preset.dailyPrice : prev.dailyPrice,
+      securityDeposit: prev.securityDeposit === 3000 ? preset.securityDeposit : prev.securityDeposit,
+    }));
+    setImageLoadError(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,8 +97,22 @@ export default function NewVehiclePage() {
     setLoading(true);
 
     try {
+      let finalImageUrl = formData.imageUrl ? formData.imageUrl.trim() : '';
+      if (!finalImageUrl) {
+        finalImageUrl = '/images/cars/swift.jpg';
+      } else if (
+        !finalImageUrl.startsWith('http://') &&
+        !finalImageUrl.startsWith('https://') &&
+        !finalImageUrl.startsWith('/') &&
+        !finalImageUrl.startsWith('data:')
+      ) {
+        // Automatically ensure leading slash for relative paths like "images/cars/BMW4.jpg"
+        finalImageUrl = '/' + finalImageUrl;
+      }
+
       const payload = {
         ...formData,
+        imageUrl: finalImageUrl,
         year: parseInt(String(formData.year)),
         seatingCapacity: parseInt(String(formData.seatingCapacity)),
         dailyPrice: parseFloat(String(formData.dailyPrice)),
@@ -61,7 +121,7 @@ export default function NewVehiclePage() {
         images: [
           {
             id: `img-${Date.now()}`,
-            url: formData.imageUrl,
+            url: finalImageUrl,
             caption: `${formData.brand} ${formData.model}`,
             isPrimary: true,
           }
@@ -358,40 +418,118 @@ export default function NewVehiclePage() {
 
         {/* Vehicle Photo Upload / Preset Gallery Selection */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
-          <h2 className="text-base font-extrabold text-slate-900 border-b border-slate-100 pb-3">
-            Primary Vehicle Photo
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <h2 className="text-base font-extrabold text-slate-900">
+                Primary Vehicle Photo
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Supports custom local paths (e.g. <code>/images/cars/bmw-m4.jpg</code>, <code>/images/cars/BMW4.jpg</code>), external web URLs, or direct device uploads.
+              </p>
+            </div>
+
+            {/* Direct Upload Button */}
+            <div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                accept="image/*"
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingImage}
+                className="px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-xs font-bold text-blue-700 transition flex items-center gap-2 active:scale-95 shadow-sm"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>{uploadingImage ? 'Loading Image...' : 'Upload Image from Computer'}</span>
+              </button>
+            </div>
+          </div>
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-              Image URL or Quick Presets
+              Image URL or Local Relative Path
             </label>
             <input
-              type="url"
+              type="text"
               required
               value={formData.imageUrl}
-              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-              placeholder="https://images.unsplash.com/..."
+              onChange={(e) => {
+                setFormData({ ...formData, imageUrl: e.target.value });
+                setImageLoadError(false);
+              }}
+              placeholder="/images/cars/bmw-m4.jpg, /images/cars/BMW4.jpg, or https://..."
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none mb-3"
             />
 
-            <div className="flex items-center gap-2 overflow-x-auto pb-2">
-              <span className="text-xs font-bold text-slate-500 shrink-0">Presets:</span>
-              {sampleImages.map((s, idx) => (
-                <button
-                  type="button"
-                  key={idx}
-                  onClick={() => setFormData({ ...formData, imageUrl: s.url })}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-[11px] font-semibold text-slate-700 transition shrink-0"
-                >
-                  {s.label}
-                </button>
-              ))}
+            {/* Presets Grid */}
+            <div className="space-y-1.5">
+              <span className="text-xs font-bold text-slate-500 block">Quick Car Presets (Click to Auto-fill):</span>
+              <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto p-2 bg-slate-50 rounded-2xl border border-slate-100">
+                {sampleImages.map((s, idx) => (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => applyPreset(s)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border shrink-0 ${
+                      formData.imageUrl === s.url
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                        : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    {s.label.includes('BMW') && <Sparkles className="w-3 h-3 text-amber-400" />}
+                    <span>{s.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
+            {/* Live Preview Card */}
             {formData.imageUrl && (
-              <div className="mt-4 w-48 aspect-[16/10] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
-                <img src={formData.imageUrl} alt="Vehicle preview" className="w-full h-full object-cover" />
+              <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div className="relative w-48 aspect-[16/10] rounded-xl overflow-hidden border border-slate-300 bg-slate-900 shadow-sm shrink-0">
+                  <img
+                    src={formData.imageUrl}
+                    alt="Vehicle preview"
+                    onError={() => setImageLoadError(true)}
+                    onLoad={() => setImageLoadError(false)}
+                    className="w-full h-full object-cover"
+                  />
+                  {imageLoadError && (
+                    <div className="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center text-center p-2 text-white">
+                      <FileImage className="w-6 h-6 text-amber-400 mb-1" />
+                      <span className="text-[10px] font-bold text-slate-300">Custom Path Staged</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-1 min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-extrabold text-slate-900 truncate">
+                      {formData.brand || 'Custom'} {formData.model || 'Car'}
+                    </span>
+                    {!imageLoadError ? (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                        <Check className="w-3 h-3" /> Image Verified
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
+                        Path Staged
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] font-mono text-slate-500 truncate">
+                    {formData.imageUrl.startsWith('data:') ? 'Uploaded custom photo (Base64 data)' : formData.imageUrl}
+                  </p>
+                  <p className="text-[10px] text-slate-400">
+                    {!imageLoadError
+                      ? 'Image loaded successfully and will be displayed across fleet catalogs and booking passes.'
+                      : 'Custom URL staged. The link will be registered with the car and resolved on public routes.'}
+                  </p>
+                </div>
               </div>
             )}
           </div>
