@@ -21,12 +21,21 @@ import {
   Clock,
   Home,
   Navigation,
-  Compass
+  Compass,
+  Lock
 } from 'lucide-react';
 import { PublicNav } from '@/components/layout/PublicNav';
 import { PublicFooter } from '@/components/layout/PublicFooter';
 import { initialVehicles } from '@/lib/demo-data';
 import { formatINR, POPULAR_INDIAN_HUBS, KM_PACKAGES } from '@/lib/currency';
+
+// Anti-AI Bespoke Interactive Components
+import RoadTripTicker from '@/components/interactive/RoadTripTicker';
+import CarStudioVisualizer from '@/components/interactive/CarStudioVisualizer';
+import TripCostCalculator from '@/components/interactive/TripCostCalculator';
+import LiveHubRadar from '@/components/interactive/LiveHubRadar';
+import DynamicTripIsland from '@/components/interactive/DynamicTripIsland';
+import PaymentModal from '@/components/payment/PaymentModal';
 
 export default function LandingPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -37,6 +46,10 @@ export default function LandingPage() {
   const [pickupTime, setPickupTime] = useState('10:00');
   const [returnDate, setReturnDate] = useState('2026-10-04');
   const [returnTime, setReturnTime] = useState('18:00');
+
+  // Checkout modal state
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [selectedVehicleForPayment, setSelectedVehicleForPayment] = useState<any>(initialVehicles[0]);
 
   const currentCityHubs = POPULAR_INDIAN_HUBS.find(c => c.city === selectedCity)?.hubs || POPULAR_INDIAN_HUBS[0].hubs;
 
@@ -59,6 +72,12 @@ export default function LandingPage() {
         if (selectedCategory === 'LUXURY') return v.type === 'LUXURY';
         return v.type === selectedCategory;
       });
+
+  const handleOpenCheckout = (vehicleId: string) => {
+    const v = initialVehicles.find(item => item.id === vehicleId) || initialVehicles[0];
+    setSelectedVehicleForPayment(v);
+    setPaymentModalOpen(true);
+  };
 
   const testimonials = [
     {
@@ -90,6 +109,9 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <PublicNav />
+
+      {/* Live Dispatches Ticker */}
+      <RoadTripTicker />
 
       {/* Hero Section - Zoomcar Aesthetic */}
       <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-emerald-950 text-white pt-20 pb-32">
@@ -126,12 +148,14 @@ export default function LandingPage() {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
 
-                <Link
-                  href="/login"
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-bold text-base border border-slate-700 transition flex items-center justify-center gap-2"
+                <button
+                  type="button"
+                  onClick={() => handleOpenCheckout(initialVehicles[2]?.id || 'veh-03')}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-800/90 hover:bg-slate-700 text-white font-bold text-base border border-slate-700 transition flex items-center justify-center gap-2"
                 >
-                  <span>Host & Fleet Login</span>
-                </Link>
+                  <Lock className="w-4 h-4 text-emerald-400" />
+                  <span>Instant Razorpay Checkout</span>
+                </button>
               </div>
 
               {/* Zoomcar Key USPs */}
@@ -302,7 +326,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Category Filter Bar */}
+      {/* Flagship Showstopper: Interactive Car Studio */}
+      <CarStudioVisualizer onQuickCheckout={(vId) => handleOpenCheckout(vId)} />
+
+      {/* Category Filter Bar & Catalog */}
       <section className="pt-20 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200/60">
@@ -395,7 +422,7 @@ export default function LandingPage() {
                           {vehicle.model}
                         </h3>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
+                      <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md font-mono">
                         {vehicle.registrationNumber}
                       </span>
                     </div>
@@ -436,16 +463,17 @@ export default function LandingPage() {
                       )}
                     </div>
 
-                    <Link
-                      href={`/dashboard/bookings/new?vehicleId=${vehicle.id}`}
+                    <button
+                      type="button"
+                      onClick={() => handleOpenCheckout(vehicle.id)}
                       className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition shadow-sm ${
                         isAvailable
-                          ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20'
+                          ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20 active:scale-95'
                           : 'bg-slate-100 text-slate-400 cursor-not-allowed pointer-events-none'
                       }`}
                     >
-                      {isAvailable ? 'Book with Shield' : 'Booked Out'}
-                    </Link>
+                      {isAvailable ? 'Book with Razorpay' : 'Booked Out'}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -453,6 +481,9 @@ export default function LandingPage() {
           })}
         </div>
       </section>
+
+      {/* Road Trip vs Flight Fare Calculator */}
+      <TripCostCalculator />
 
       {/* Why Choose Zoomcar / RentaRide Features */}
       <section className="py-20 bg-slate-50 border-t border-b border-slate-200/70">
@@ -512,6 +543,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Transit Radar & Hub Telemetry */}
+      <LiveHubRadar onSelectHubCity={(city) => setSelectedCity(city)} />
 
       {/* Customer Testimonials */}
       <section className="py-20 bg-white">
@@ -581,6 +615,27 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Floating Dynamic Booking Island */}
+      <DynamicTripIsland
+        selectedVehicle={selectedVehicleForPayment}
+        city={selectedCity}
+        onOpenCheckout={() => setPaymentModalOpen(true)}
+      />
+
+      {/* Payment Gateway Modal */}
+      <PaymentModal
+        isOpen={paymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+        vehicle={selectedVehicleForPayment}
+        bookingParams={{
+          city: selectedCity,
+          pickupDate,
+          returnDate,
+          deliveryMode: deliveryType,
+          plan: 'STANDARD'
+        }}
+      />
 
       <PublicFooter />
     </div>

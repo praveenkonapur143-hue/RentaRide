@@ -18,8 +18,10 @@ import {
   Navigation,
   ShieldCheck,
   Home,
-  MapPin
+  MapPin,
+  Lock
 } from 'lucide-react';
+import PaymentModal from '@/components/payment/PaymentModal';
 import { BookingService } from '@/modules/booking/service';
 import {
   formatINR,
@@ -69,6 +71,7 @@ function NewBookingForm() {
   // Realtime Availability check state
   const [availabilityCheck, setAvailabilityCheck] = useState<{ available: boolean; conflictReason?: string } | null>(null);
   const [checkingAvailability, setCheckingAvailability] = useState(false);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   // Set default returnDate to 3 days after pickup if empty
   useEffect(() => {
@@ -640,24 +643,53 @@ function NewBookingForm() {
             </div>
 
             {/* Submit Action */}
-            <button
-              type="submit"
-              disabled={submitting || (availabilityCheck ? !availabilityCheck.available : false)}
-              className={`w-full py-4 rounded-2xl font-extrabold text-sm shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 ${
-                submitting || (availabilityCheck ? !availabilityCheck.available : false)
-                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/25'
-              }`}
-            >
-              {submitting ? (
-                <span>Generating Agreement...</span>
-              ) : (
-                <span>Confirm & Reserve Trip</span>
-              )}
-            </button>
+            <div className="space-y-2.5">
+              <button
+                type="button"
+                onClick={() => setPaymentModalOpen(true)}
+                disabled={!selectedVehicle || (availabilityCheck ? !availabilityCheck.available : false)}
+                className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 disabled:opacity-50 text-white font-black text-sm shadow-xl shadow-emerald-600/30 transition flex items-center justify-center gap-2"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Pay & Confirm via Razorpay / UPI</span>
+              </button>
+
+              <button
+                type="submit"
+                disabled={submitting || (availabilityCheck ? !availabilityCheck.available : false)}
+                className={`w-full py-3 rounded-2xl font-bold text-xs transition border ${
+                  submitting || (availabilityCheck ? !availabilityCheck.available : false)
+                    ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                    : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-sm'
+                }`}
+              >
+                {submitting ? (
+                  <span>Generating Agreement...</span>
+                ) : (
+                  <span>Reserve with Pay Later / Cash</span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </form>
+
+      {/* Payment Gateway Modal */}
+      {selectedVehicle && (
+        <PaymentModal
+          isOpen={paymentModalOpen}
+          onClose={() => setPaymentModalOpen(false)}
+          vehicle={selectedVehicle}
+          bookingParams={{
+            city: selectedCity,
+            pickupDate,
+            returnDate,
+            days: rawPricing.days,
+            deliveryMode,
+            plan: protectionPlan === 'peace_of_mind' ? 'PEACE_OF_MIND' : 'STANDARD'
+          }}
+        />
+      )}
     </div>
   );
 }
