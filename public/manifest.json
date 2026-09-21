@@ -1,0 +1,25 @@
+{
+  "name": "RentaRide • Self-Drive Fleet India",
+  "short_name": "RentaRide",
+  "description": "Zero security deposit self-drive car rentals across India. Keyless Bluetooth unlock, unlimited km packages, and instant booking.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "orientation": "any",
+  "categories": ["travel", "utilities", "transportation"],
+  "icons": [
+    {
+      "src": "/images/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

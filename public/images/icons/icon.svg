@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded squircle icon container -->
+  <rect width="512" height="512" rx="112" fill="#020617"/>
+  <rect x="24" y="24" width="464" height="464" rx="96" fill="url(#bgGrad)"/>
+  <rect x="24" y="24" width="464" height="464" rx="96" fill="url(#glowGrad)"/>
+  
+  <!-- Stylized RentaRide 'R' Mark -->
+  <path d="M168 128 H276 C336 128 376 164 376 216 C376 260 344 292 296 304 L384 384 H312 L236 312 H224 V384 H168 V128 Z M224 176 V264 H272 C302 264 320 244 320 220 C320 196 302 176 272 176 H224 Z" fill="#FFFFFF"/>
+</svg>

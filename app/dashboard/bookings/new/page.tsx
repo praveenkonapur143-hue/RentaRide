@@ -267,12 +267,13 @@ function NewBookingForm() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 pb-36 md:pb-12">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Link
-          href="/dashboard/bookings"
-          className="p-2 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-800 transition"
+          href={currentUser?.role === 'CUSTOMER' ? '/' : '/dashboard/bookings'}
+          className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-800 active:scale-95 transition shadow-sm"
+          title="Back"
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
@@ -747,6 +748,39 @@ function NewBookingForm() {
           </div>
         </div>
       </form>
+
+      {/* Mobile Sticky Action Bar */}
+      <aside
+        aria-label="Mobile Instant Booking Confirmation"
+        className="fixed bottom-16 left-0 right-0 z-30 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800/90 px-4 py-3 md:hidden flex items-center justify-between gap-3 shadow-[0_-8px_24px_rgba(0,0,0,0.5)]"
+      >
+        <div className="min-w-0">
+          <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Total Payable</div>
+          <div className="text-base font-black text-emerald-400 truncate">
+            {formatINR(finalTotal)}
+            <span className="text-[10px] font-medium text-slate-400 ml-1">({rawPricing.days}d)</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={submitting || (availabilityCheck ? !availabilityCheck.available : false)}
+            className="px-3 py-2.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700 active:scale-95 disabled:opacity-50 transition"
+          >
+            {submitting ? 'Booking...' : 'Pay Later'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentModalOpen(true)}
+            disabled={!selectedVehicle || (availabilityCheck ? !availabilityCheck.available : false)}
+            className="px-4 py-2.5 rounded-xl text-xs font-black bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 shadow-lg shadow-emerald-500/25 disabled:opacity-50 transition flex items-center gap-1.5"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Pay & Book</span>
+          </button>
+        </div>
+      </aside>
 
       {/* Payment Gateway Modal */}
       {selectedVehicle && (

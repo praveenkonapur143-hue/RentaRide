@@ -186,7 +186,7 @@ export default function MyAccountPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-100 pb-28 md:pb-20">
       {/* Navigation Bar */}
       <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -333,7 +333,7 @@ export default function MyAccountPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {activeBookings.map((b) => (
                 <div
                   key={b.id}
@@ -526,8 +526,11 @@ export default function MyAccountPage() {
 
       {/* Cancellation Confirmation Modal */}
       {cancelModalOpen && selectedCancelBooking && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-7 max-w-lg w-full text-slate-200 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <div className="bg-slate-900 border border-slate-700 rounded-t-[2rem] sm:rounded-3xl p-6 sm:p-7 max-w-lg w-full text-slate-200 shadow-2xl relative my-0 sm:my-8 pb-safe max-h-[92vh] overflow-y-auto">
+            {/* Mobile drag handle */}
+            <div className="w-12 h-1 rounded-full bg-slate-700 mx-auto -mt-2 mb-4 sm:hidden" />
+
             <button
               onClick={() => {
                 if (!cancelling) {

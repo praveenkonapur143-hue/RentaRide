@@ -221,8 +221,8 @@ export default function PaymentModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-3xl my-8">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+      <div className="relative w-full max-w-3xl my-0 sm:my-8 max-h-[95vh] sm:max-h-none flex flex-col">
         {/* If Confirmed, render Boarding Pass */}
         {confirmedPass ? (
           <div>
@@ -236,37 +236,43 @@ export default function PaymentModal({
           </div>
         ) : (
           /* Payment Modal Container */
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white">
+          <div className="bg-slate-900 border border-slate-800 rounded-t-[2rem] sm:rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col max-h-[92vh] sm:max-h-none">
+            {/* Mobile Bottom Sheet Handle */}
+            <div className="sm:hidden pt-3 pb-1 flex justify-center bg-slate-950">
+              <div className="w-12 h-1 rounded-full bg-slate-700" />
+            </div>
+
             {/* Modal Header */}
-            <div className="p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+            <div className="p-4 sm:p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
                   <Lock className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-base sm:text-lg font-black text-white">
+                    <h2 className="text-sm sm:text-lg font-black text-white">
                       Razorpay Secure Checkout
                     </h2>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
+                    <span className="hidden xs:inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
                       256-BIT ENCRYPTED
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Direct instant settlement with NHAI FASTag & UPI Gateway
+                  <p className="text-xs text-slate-400 line-clamp-1 sm:line-clamp-none">
+                    Direct instant settlement with UPI & FASTag Gateway
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-amber-300">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] sm:text-xs font-mono font-bold text-amber-300">
                   <Clock className="w-3.5 h-3.5" />
                   <span>{formatTimer(secondsRemaining)}</span>
                 </div>
 
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                  className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 active:scale-90 transition"
+                  aria-label="Close Checkout"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -274,9 +280,9 @@ export default function PaymentModal({
             </div>
 
             {/* Modal Body Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+            <div className="overflow-y-auto grid grid-cols-1 lg:grid-cols-12 gap-0 pb-safe">
               {/* Left Column: Payment Methods (7 cols) */}
-              <div className="lg:col-span-7 p-6 sm:p-8 space-y-6 border-b lg:border-b-0 lg:border-r border-slate-800">
+              <div className="lg:col-span-7 p-4 sm:p-8 space-y-5 sm:space-y-6 border-b lg:border-b-0 lg:border-r border-slate-800">
                 {/* Gateway Tab Selectors */}
                 <div className="grid grid-cols-4 gap-1.5 p-1 bg-slate-950 rounded-2xl border border-slate-800 text-xs font-bold">
                   <button
@@ -546,7 +552,7 @@ export default function PaymentModal({
               </div>
 
               {/* Right Column: Fare Breakdown & CTA (5 cols) */}
-              <div className="lg:col-span-5 p-6 sm:p-8 bg-slate-950/60 flex flex-col justify-between space-y-6">
+              <div className="lg:col-span-5 p-4 sm:p-8 bg-slate-950/60 flex flex-col justify-between space-y-6">
                 <div>
                   <div className="pb-4 border-b border-slate-800">
                     <span className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-wide">

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+}
+
 @layer base {
   :root {
     --background: 210 40% 98%;
@@ -10,6 +16,9 @@
 
   body {
     @apply bg-slate-50 text-slate-900 antialiased selection:bg-emerald-600 selection:text-white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
   }
 }
 
@@ -41,6 +50,17 @@
 
   .perspective-1000 {
     perspective: 1000px;
+  }
+
+  /* Safe area insets for notched phones (iPhone, Android) */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 

@@ -49,7 +49,7 @@ export default function DynamicTripIsland({
   if (!visible || !selectedVehicle) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-full max-w-xl px-4 transition-all duration-500 animate-float">
+    <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-xl px-3 sm:px-4 transition-all duration-500 animate-float">
       <div className="bg-slate-950/90 border border-emerald-500/40 backdrop-blur-xl shadow-2xl rounded-3xl p-3 sm:p-3.5 flex items-center justify-between gap-3 text-white">
         {/* Left: Thumbnail & Model */}
         <div className="flex items-center gap-3 min-w-0">

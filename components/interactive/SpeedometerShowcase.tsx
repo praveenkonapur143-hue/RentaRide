@@ -149,10 +149,10 @@ export default function SpeedometerShowcase() {
         </div>
 
         {/* Console Box */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-900/70 border border-slate-800/90 rounded-3xl p-6 sm:p-10 backdrop-blur-xl shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-900/70 border border-slate-800/90 rounded-3xl p-4 sm:p-10 backdrop-blur-xl shadow-2xl">
           {/* Left: SVG Circular Gauge */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center">
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72">
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72">
               <svg viewBox="0 0 240 240" className="w-full h-full transform">
                 {/* Background arc track */}
                 <circle
