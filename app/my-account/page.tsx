@@ -24,7 +24,11 @@ import {
   ChevronRight,
   Sparkles,
   Smartphone,
-  Radio
+  Radio,
+  XCircle,
+  X,
+  RefreshCw,
+  AlertTriangle
 } from 'lucide-react';
 import { formatINR } from '@/lib/currency';
 
@@ -39,59 +43,65 @@ export default function MyAccountPage() {
   const [activeUnlockBooking, setActiveUnlockBooking] = useState<any | null>(null);
   const [unlockStep, setUnlockStep] = useState<'IDLE' | 'SCANNING' | 'CONNECTED' | 'UNLOCKED'>('IDLE');
 
-  useEffect(() => {
-    async function loadAccountData() {
-      try {
-        const meRes = await fetch('/api/auth/me');
-        const meData = await meRes.json();
+  // Cancel ride modal state
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [selectedCancelBooking, setSelectedCancelBooking] = useState<any | null>(null);
+  const [cancelReasonCategory, setCancelReasonCategory] = useState('Change of travel plans or dates');
+  const [customCancelReason, setCustomCancelReason] = useState('');
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelToast, setCancelToast] = useState<string | null>(null);
 
-        if (!meData?.user) {
-          router.push('/user/login?redirect=/my-account');
-          return;
-        }
+  const loadAccountData = async () => {
+    try {
+      const meRes = await fetch('/api/auth/me');
+      const meData = await meRes.json();
 
-        setUser(meData.user);
-
-        // Fetch bookings
-        const bRes = await fetch('/api/bookings');
-        const bData = await bRes.json();
-
-        // Fetch customer profile details if available
-        let userBookings = [];
-        if (bData?.bookings) {
-          // If customer user, filter to bookings matching their email or customer ID
-          userBookings = bData.bookings.filter(
-            (b: any) =>
-              b.customerEmail?.toLowerCase() === meData.user.email?.toLowerCase() ||
-              b.customerId === meData.user.id
-          );
-
-          // If no specific match found, fallback to showing active demo bookings for seamless demo experience
-          if (userBookings.length === 0 && meData.user.role === 'CUSTOMER') {
-            userBookings = bData.bookings.slice(0, 3);
-          }
-        }
-
-        setBookings(userBookings);
-
-        // Try to fetch customer profile
-        const cRes = await fetch('/api/customers');
-        const cData = await cRes.json();
-        if (cData?.customers) {
-          const matchedCust = cData.customers.find(
-            (c: any) => c.email.toLowerCase() === meData.user.email.toLowerCase()
-          );
-          if (matchedCust) {
-            setCustomer(matchedCust);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+      if (!meData?.user) {
+        router.push('/user/login?redirect=/my-account');
+        return;
       }
-    }
 
+      setUser(meData.user);
+
+      // Fetch bookings
+      const bRes = await fetch('/api/bookings');
+      const bData = await bRes.json();
+
+      // Fetch customer profile details if available
+      let userBookings = [];
+      if (bData?.bookings) {
+        userBookings = bData.bookings.filter(
+          (b: any) =>
+            b.customerEmail?.toLowerCase() === meData.user.email?.toLowerCase() ||
+            b.customerId === meData.user.id
+        );
+
+        if (userBookings.length === 0 && meData.user.role === 'CUSTOMER') {
+          userBookings = bData.bookings.slice(0, 3);
+        }
+      }
+
+      setBookings(userBookings);
+
+      // Try to fetch customer profile
+      const cRes = await fetch('/api/customers');
+      const cData = await cRes.json();
+      if (cData?.customers) {
+        const matchedCust = cData.customers.find(
+          (c: any) => c.email?.toLowerCase() === meData.user.email?.toLowerCase()
+        );
+        if (matchedCust) {
+          setCustomer(matchedCust);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadAccountData();
   }, [router]);
 
@@ -114,6 +124,47 @@ export default function MyAccountPage() {
         setUnlockStep('UNLOCKED');
       }, 1200);
     }, 1400);
+  };
+
+  const handleOpenCancelModal = (booking: any) => {
+    setSelectedCancelBooking(booking);
+    setCancelReasonCategory('Change of travel plans or dates');
+    setCustomCancelReason('');
+    setCancelModalOpen(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!selectedCancelBooking) return;
+    setCancelling(true);
+    try {
+      const finalReason =
+        cancelReasonCategory === 'Other reason'
+          ? (customCancelReason.trim() || 'Renter requested cancellation')
+          : (customCancelReason.trim() ? `${cancelReasonCategory} - ${customCancelReason.trim()}` : cancelReasonCategory);
+
+      const res = await fetch(`/api/bookings/${selectedCancelBooking.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'CANCEL', reason: finalReason }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        alert(data.error || 'Failed to cancel reservation');
+        setCancelling(false);
+        return;
+      }
+
+      setCancelModalOpen(false);
+      setSelectedCancelBooking(null);
+      setCancelToast('Trip cancelled successfully! 100% full refund has been credited back to your original payment method.');
+      setTimeout(() => setCancelToast(null), 8000);
+      await loadAccountData();
+    } catch (err: any) {
+      alert(err.message || 'Cancellation error');
+    } finally {
+      setCancelling(false);
+    }
   };
 
   if (loading) {
@@ -174,6 +225,22 @@ export default function MyAccountPage() {
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+        {/* Cancellation Success Notification */}
+        {cancelToast && (
+          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-bold flex items-center justify-between gap-3 shadow-lg shadow-emerald-950/50 animate-in fade-in slide-in-from-top-3">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span>{cancelToast}</span>
+            </div>
+            <button
+              onClick={() => setCancelToast(null)}
+              className="text-emerald-400 hover:text-white text-xs font-semibold p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {/* Welcome Profile Header Card */}
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-slate-800 p-6 sm:p-8 shadow-2xl">
           <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -352,7 +419,7 @@ export default function MyAccountPage() {
                     <button
                       type="button"
                       onClick={() => handleStartUnlock(b)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-md shadow-emerald-500/20 transition active:scale-95 flex items-center justify-center gap-1.5"
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-md shadow-emerald-500/20 transition active:scale-95 flex items-center justify-center gap-1.5 min-w-[140px]"
                     >
                       <Unlock className="w-3.5 h-3.5" />
                       <span>Contactless Unlock</span>
@@ -373,6 +440,18 @@ export default function MyAccountPage() {
                       <CreditCard className="w-3.5 h-3.5" />
                       <span>Invoice</span>
                     </Link>
+
+                    {b.status !== 'ACTIVE_RENTAL' && (
+                      <button
+                        type="button"
+                        onClick={() => handleOpenCancelModal(b)}
+                        className="py-2.5 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 border border-rose-500/30 font-bold text-xs transition flex items-center gap-1.5 active:scale-95"
+                        title="Cancel this reservation"
+                      >
+                        <XCircle className="w-3.5 h-3.5 text-rose-400" />
+                        <span>Cancel Ride</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -385,13 +464,13 @@ export default function MyAccountPage() {
           <div className="pt-4">
             <h2 className="text-xl font-black text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-slate-400" />
-              Completed Trips History
+              Completed & Cancelled Trips History
             </h2>
             <div className="space-y-3">
               {pastBookings.map((b) => (
                 <div
                   key={b.id}
-                  className="rounded-2xl bg-slate-900 border border-slate-800 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="rounded-2xl bg-slate-900 border border-slate-800 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-slate-700 transition"
                 >
                   <div className="flex items-center gap-3.5">
                     <div className="w-12 h-12 rounded-xl bg-slate-950 overflow-hidden shrink-0 border border-slate-800">
@@ -402,13 +481,30 @@ export default function MyAccountPage() {
                       )}
                     </div>
                     <div>
-                      <h4 className="text-sm font-black text-white">
-                        {b.vehicleBrand} {b.vehicleModel}
-                      </h4>
-                      <p className="text-[11px] text-slate-400">
-                        {b.bookingNumber} • {new Date(b.pickupDate).toLocaleDateString('en-IN')} -{' '}
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-black text-white">
+                          {b.vehicleBrand} {b.vehicleModel}
+                        </h4>
+                        {b.status === 'CANCELLED' ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                            Cancelled
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400">
+                            Completed
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        {b.bookingNumber} • {new Date(b.pickupDate).toLocaleDateString('en-IN')} to{' '}
                         {new Date(b.returnDate).toLocaleDateString('en-IN')}
                       </p>
+                      {b.status === 'CANCELLED' && (
+                        <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1.5 font-medium">
+                          <span>Reason: {b.cancellationReason || 'Customer requested'}</span>
+                          <span>• 100% Full Refund Credited</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -427,6 +523,166 @@ export default function MyAccountPage() {
           </div>
         )}
       </main>
+
+      {/* Cancellation Confirmation Modal */}
+      {cancelModalOpen && selectedCancelBooking && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-7 max-w-lg w-full text-slate-200 shadow-2xl relative my-8">
+            <button
+              onClick={() => {
+                if (!cancelling) {
+                  setCancelModalOpen(false);
+                  setSelectedCancelBooking(null);
+                }
+              }}
+              className="absolute top-5 right-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0">
+                <XCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-white">Cancel Your Reservation</h3>
+                <p className="text-xs text-slate-400">
+                  {selectedCancelBooking.bookingNumber} • {selectedCancelBooking.vehicleBrand} {selectedCancelBooking.vehicleModel}
+                </p>
+              </div>
+            </div>
+
+            {/* Vehicle Card Preview */}
+            <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-3.5 mb-4">
+              <div className="w-16 h-12 rounded-xl bg-slate-900 overflow-hidden shrink-0 border border-slate-800">
+                {selectedCancelBooking.vehicleImage ? (
+                  <img src={selectedCancelBooking.vehicleImage} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <Car className="w-6 h-6 m-auto text-slate-600" />
+                )}
+              </div>
+              <div className="text-xs min-w-0 flex-1">
+                <span className="font-bold text-white block truncate">
+                  {selectedCancelBooking.vehicleBrand} {selectedCancelBooking.vehicleModel}
+                </span>
+                <span className="text-slate-400 text-[11px] block">
+                  {new Date(selectedCancelBooking.pickupDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - {new Date(selectedCancelBooking.returnDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] text-slate-500 block uppercase font-bold">Total Fare</span>
+                <span className="text-xs font-black text-emerald-400">
+                  {formatINR(selectedCancelBooking.totalAmount)}
+                </span>
+              </div>
+            </div>
+
+            {/* Policy & Refund Guarantee Box */}
+            <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 mb-5 space-y-2">
+              <div className="flex items-center gap-2 text-emerald-300 text-xs font-extrabold">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>RentaRide Free Cancellation Policy Applied</span>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Changed your mind? Under our friendly policy, you are entitled to a <strong>100% full refund</strong> with zero cancellation charges.
+              </p>
+              <div className="pt-2 border-t border-emerald-500/20 flex items-center justify-between text-xs">
+                <span className="text-slate-400">Refund Amount Credited:</span>
+                <span className="font-black text-emerald-400 text-sm">
+                  {formatINR(selectedCancelBooking.advancePayment > 0 ? selectedCancelBooking.advancePayment : selectedCancelBooking.totalAmount)}
+                </span>
+              </div>
+              <div className="text-[10px] text-slate-400 flex items-center gap-1.5">
+                <Clock className="w-3 h-3 text-emerald-400" />
+                <span>Instant settlement initiated back to original payment mode (UPI / Card / NetBanking)</span>
+              </div>
+            </div>
+
+            {/* Reason Selection */}
+            <div className="space-y-3 mb-6">
+              <label className="block text-xs font-extrabold text-slate-300 uppercase tracking-wider">
+                Please select a reason for cancellation:
+              </label>
+
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  'Change of travel plans or dates',
+                  'Found an alternative car in RentaRide fleet',
+                  'Personal emergency / unexpected commitments',
+                  'Booked duplicate or made a mistake',
+                  'Other reason'
+                ].map((reason) => (
+                  <label
+                    key={reason}
+                    className={`p-3 rounded-xl border text-xs font-semibold flex items-center gap-2.5 cursor-pointer transition ${
+                      cancelReasonCategory === reason
+                        ? 'bg-emerald-500/10 border-emerald-500/50 text-white'
+                        : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="cancellationReason"
+                      value={reason}
+                      checked={cancelReasonCategory === reason}
+                      onChange={(e) => setCancelReasonCategory(e.target.value)}
+                      className="text-emerald-500 focus:ring-0"
+                    />
+                    <span>{reason}</span>
+                  </label>
+                ))}
+              </div>
+
+              {cancelReasonCategory === 'Other reason' && (
+                <div className="pt-2">
+                  <textarea
+                    rows={2}
+                    value={customCancelReason}
+                    onChange={(e) => setCustomCancelReason(e.target.value)}
+                    placeholder="Provide a brief note (optional)..."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col-reverse sm:flex-row items-center gap-3">
+              <button
+                type="button"
+                disabled={cancelling}
+                onClick={() => {
+                  setCancelModalOpen(false);
+                  setSelectedCancelBooking(null);
+                }}
+                className="w-full sm:w-1/2 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition border border-slate-700"
+              >
+                Keep My Reservation
+              </button>
+
+              <button
+                type="button"
+                disabled={cancelling}
+                onClick={handleConfirmCancel}
+                className="w-full sm:w-1/2 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-extrabold text-xs shadow-lg shadow-rose-600/30 transition flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {cancelling ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Processing Refund...</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="w-3.5 h-3.5" />
+                    <span>Yes, Cancel My Ride</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Contactless Unlock Simulator Modal */}
       {activeUnlockBooking && (

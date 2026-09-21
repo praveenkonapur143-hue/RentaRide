@@ -584,6 +584,20 @@ class InMemoryStore {
     return this.notifications;
   }
 
+  createNotification(notif: { title: string; message: string; type?: 'ALERT' | 'INFO' | 'WARNING'; link?: string }) {
+    const newNotif = {
+      id: `notif-${Date.now()}`,
+      title: notif.title,
+      message: notif.message,
+      type: notif.type || 'INFO',
+      isRead: false,
+      link: notif.link || '/dashboard/bookings',
+      createdAt: new Date().toISOString(),
+    };
+    this.notifications.unshift(newNotif);
+    return newNotif;
+  }
+
   markNotificationAsRead(id: string) {
     const n = this.notifications.find(item => item.id === id);
     if (n) n.isRead = true;

@@ -230,12 +230,38 @@ export class BookingService {
       status: 'CANCELLED',
       cancellationReason: reason,
       cancelledAt: new Date().toISOString(),
+      balanceAmount: 0,
     });
 
     // Release vehicle back to AVAILABLE
     dataStore.updateVehicle(booking.vehicleId, { status: 'AVAILABLE' });
 
-    dataStore.createAuditLog('CANCEL_BOOKING', 'BOOKING', id, { reason });
+    // If advance payment was made, initiate automated 100% refund
+    if (booking.advancePayment > 0) {
+      dataStore.createPayment({
+        bookingId: booking.id,
+        customerId: booking.customerId,
+        amount: booking.advancePayment,
+        paymentMethod: 'UPI',
+        paymentStatus: 'REFUNDED',
+        transactionReference: `REFUND-${Date.now().toString(36).toUpperCase()}`,
+        notes: `100% full cancellation refund credited back to original source | Reason: ${reason}`
+      });
+    }
+
+    const vehicle = dataStore.getVehicleById(booking.vehicleId);
+    dataStore.createNotification({
+      title: 'Trip Cancelled',
+      message: `Booking ${booking.bookingNumber} (${vehicle?.brand || ''} ${vehicle?.model || ''}) was cancelled. Reason: ${reason}`,
+      type: 'INFO',
+      link: `/dashboard/bookings/${booking.id}`
+    });
+
+    dataStore.createAuditLog('CANCEL_BOOKING', 'BOOKING', id, {
+      reason,
+      refundAmount: booking.advancePayment,
+      releasedVehicle: booking.vehicleId
+    });
 
     return updated;
   }
