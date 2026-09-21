@@ -97,26 +97,42 @@ function NewBookingForm() {
         const vData = await vRes.json();
         const meData = await meRes.json();
 
-        setCustomers(cData.customers || []);
+        const customerList = cData.customers || [];
         setVehicles(vData.vehicles || []);
+
+        let resolvedCustomerId = searchParams.get('customerId') || '';
 
         if (meData?.user) {
           setCurrentUser(meData.user);
           if (meData.user.role === 'CUSTOMER') {
-            const matched = (cData.customers || []).find(
+            const matched = customerList.find(
               (c: any) =>
-                c.email.toLowerCase() === meData.user.email?.toLowerCase() ||
+                c.email?.toLowerCase() === meData.user.email?.toLowerCase() ||
                 c.id === meData.user.id
             );
             if (matched) {
-              setCustomerId(matched.id);
+              resolvedCustomerId = matched.id;
+            } else {
+              resolvedCustomerId = meData.user.id;
+              customerList.unshift({
+                id: meData.user.id,
+                fullName: meData.user.name,
+                email: meData.user.email,
+                phone: meData.user.phone || '+91 98450 12399',
+                drivingLicenceNumber: 'DL-VERIFIED-FILE',
+                status: 'ACTIVE'
+              });
             }
           }
         }
 
-        if (!customerId && cData.customers?.length) {
-          setCustomerId(cData.customers[0].id);
+        if (!resolvedCustomerId && customerList.length) {
+          resolvedCustomerId = customerList[0].id;
         }
+
+        setCustomers(customerList);
+        setCustomerId(resolvedCustomerId);
+
         if (!vehicleId && vData.vehicles?.length) {
           setVehicleId(vData.vehicles[0].id);
         }
@@ -180,9 +196,22 @@ function NewBookingForm() {
   const finalTotal = (finalSubtotal - rawPricing.discount) + finalTax;
   const finalBalance = Math.max(0, finalTotal - advancePayment);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+    if (e && 'preventDefault' in e) {
+      e.preventDefault();
+    }
     setError('');
+
+    if (!vehicleId) {
+      setError('Please select a vehicle to reserve.');
+      return;
+    }
+
+    const targetCustomerId = customerId || (currentUser?.role === 'CUSTOMER' ? currentUser.id : '');
+    if (!targetCustomerId) {
+      setError('Renter identity is required. Please sign in or select a customer.');
+      return;
+    }
 
     if (availabilityCheck && !availabilityCheck.available) {
       setError(availabilityCheck.conflictReason || 'Vehicle is not available during selected dates.');
@@ -192,7 +221,7 @@ function NewBookingForm() {
     setSubmitting(true);
     try {
       const payload = {
-        customerId,
+        customerId: targetCustomerId,
         vehicleId,
         pickupLocation,
         dropoffLocation,
@@ -681,6 +710,13 @@ function NewBookingForm() {
 
             {/* Submit Action */}
             <div className="space-y-2.5">
+              {error && (
+                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-bold text-rose-700 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={() => setPaymentModalOpen(true)}
@@ -692,7 +728,8 @@ function NewBookingForm() {
               </button>
 
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 disabled={submitting || (availabilityCheck ? !availabilityCheck.available : false)}
                 className={`w-full py-3 rounded-2xl font-bold text-xs transition border ${
                   submitting || (availabilityCheck ? !availabilityCheck.available : false)
@@ -717,6 +754,17 @@ function NewBookingForm() {
           isOpen={paymentModalOpen}
           onClose={() => setPaymentModalOpen(false)}
           vehicle={selectedVehicle}
+          customer={
+            currentUser?.role === 'CUSTOMER'
+              ? {
+                  id: customerId || currentUser.id,
+                  name: currentUser.name,
+                  email: currentUser.email,
+                  phone: currentUser.phone || '+91 98450 12399',
+                  drivingLicenceNumber: 'KA-0520190089123'
+                }
+              : customers.find(c => c.id === customerId)
+          }
           bookingParams={{
             city: selectedCity,
             pickupDate,

@@ -38,6 +38,23 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+
+    // Auto-resolve customer identity if user is logged in as a CUSTOMER
+    if (auth.user.role === 'CUSTOMER' || !body.customerId) {
+      let cust = dataStore.getCustomerByEmail(auth.user.email) || dataStore.getCustomerById(auth.user.id);
+      if (!cust && auth.user.role === 'CUSTOMER') {
+        cust = dataStore.createCustomer({
+          fullName: auth.user.name,
+          email: auth.user.email,
+          phone: auth.user.phone || '+91 98450 12399',
+          status: 'ACTIVE',
+        });
+      }
+      if (cust) {
+        body.customerId = cust.id;
+      }
+    }
+
     const validation = validateBookingInput(body);
     if (!validation.success) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
@@ -58,8 +75,12 @@ export async function POST(req: NextRequest) {
       dailyRate: vehicle.dailyPrice,
       securityDeposit: vehicle.securityDeposit,
       discount: body.discount,
-      taxRate: 10,
+      taxRate: body.taxRate !== undefined ? body.taxRate : 18,
       advancePayment: body.advancePayment,
+      kmPackage: body.kmPackage,
+      protectionPlan: body.protectionPlan,
+      deliveryMode: body.deliveryMode,
+      deliveryFee: body.deliveryFee,
       notes: body.notes,
     });
 

@@ -5,6 +5,7 @@ export interface AuthenticatedUser {
   email: string;
   name: string;
   role: UserRole;
+  phone?: string;
 }
 
 export interface AuthSession {

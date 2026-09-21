@@ -112,6 +112,10 @@ export class BookingService {
     discount?: number;
     taxRate?: number;
     advancePayment?: number;
+    kmPackage?: 'standard' | 'traveler' | 'unlimited';
+    protectionPlan?: 'standard' | 'peace_of_mind';
+    deliveryMode?: 'HUB_PICKUP' | 'DOORSTEP_DELIVERY';
+    deliveryFee?: number;
     notes?: string;
   }): { success: boolean; booking?: DemoBooking; error?: string } {
     // 1. Availability validation
@@ -126,7 +130,7 @@ export class BookingService {
       pickupDate: data.pickupDate,
       returnDate: data.returnDate,
       discount: data.discount,
-      taxRate: data.taxRate,
+      taxRate: data.taxRate !== undefined ? data.taxRate : 18,
       securityDeposit: data.securityDeposit,
       advancePayment: data.advancePayment,
     });
@@ -148,6 +152,10 @@ export class BookingService {
       totalAmount: pricing.totalAmount,
       advancePayment: pricing.advancePayment,
       balanceAmount: pricing.balanceAmount,
+      kmPackage: data.kmPackage || 'standard',
+      protectionPlan: data.protectionPlan || 'standard',
+      deliveryMode: data.deliveryMode || 'HUB_PICKUP',
+      deliveryFee: data.deliveryFee || 0,
       status: 'CONFIRMED',
       notes: data.notes || '',
     });

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-store';
+import { getAuthUser } from '@/lib/api-auth';
 
 export async function POST(req: NextRequest) {
   try {
+    const authUser = getAuthUser(req);
     const body = await req.json();
     const {
       razorpay_order_id,
@@ -10,9 +12,9 @@ export async function POST(req: NextRequest) {
       razorpay_signature,
       paymentMethod = 'UPI',
       vehicleId,
-      customerName = 'Self-Drive Guest',
-      customerEmail = 'driver@example.com',
-      customerPhone = '+91 98765 43210',
+      customerName = authUser?.name || 'Self-Drive Guest',
+      customerEmail = authUser?.email || 'driver@example.com',
+      customerPhone = authUser?.phone || '+91 98765 43210',
       drivingLicenceNumber = 'DL-1420240098765',
       pickupDate = new Date().toISOString().split('T')[0],
       returnDate = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -29,7 +31,10 @@ export async function POST(req: NextRequest) {
     }
 
     // 1. Ensure or find Customer in dataStore
-    let customer = dataStore.getCustomers().find(c => c.email.toLowerCase() === customerEmail.toLowerCase());
+    const searchCustomerId = body.customerId || (authUser?.role === 'CUSTOMER' ? authUser.id : undefined);
+    let customer = (searchCustomerId ? dataStore.getCustomerById(searchCustomerId) : null) ||
+                   (customerEmail ? dataStore.getCustomerByEmail(customerEmail) : null) ||
+                   (authUser?.email ? dataStore.getCustomerByEmail(authUser.email) : null);
     if (!customer) {
       customer = dataStore.createCustomer({
         fullName: customerName,

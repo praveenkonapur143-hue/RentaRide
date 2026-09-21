@@ -168,11 +168,52 @@ class InMemoryStore {
   }
 
   getCustomerById(id: string) {
-    return this.customers.find(c => c.id === id);
+    const cust = this.customers.find(c => c.id === id);
+    if (cust) return cust;
+    const user = this.users.find(u => u.id === id);
+    if (user) {
+      const byEmail = this.customers.find(c => c.email.toLowerCase() === user.email.toLowerCase());
+      if (byEmail) return byEmail;
+      return {
+        id: user.id,
+        fullName: user.name,
+        email: user.email,
+        phone: user.phone || '+91 98450 12399',
+        address: 'Bengaluru, Karnataka',
+        dob: '1995-01-01',
+        drivingLicenceNumber: 'KA-0520190089123',
+        licenceExpiryDate: '2040-01-01',
+        governmentIdNumber: 'XXXX-XXXX-9901',
+        status: 'ACTIVE' as const,
+        isArchived: false,
+        createdAt: user.createdAt
+      };
+    }
+    return undefined;
   }
 
   getCustomerByEmail(email: string) {
-    return this.customers.find(c => c.email.toLowerCase() === email.toLowerCase());
+    if (!email) return undefined;
+    const cust = this.customers.find(c => c.email.toLowerCase() === email.toLowerCase());
+    if (cust) return cust;
+    const user = this.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (user) {
+      return {
+        id: user.id,
+        fullName: user.name,
+        email: user.email,
+        phone: user.phone || '+91 98450 12399',
+        address: 'Bengaluru, Karnataka',
+        dob: '1995-01-01',
+        drivingLicenceNumber: 'KA-0520190089123',
+        licenceExpiryDate: '2040-01-01',
+        governmentIdNumber: 'XXXX-XXXX-9901',
+        status: 'ACTIVE' as const,
+        isArchived: false,
+        createdAt: user.createdAt
+      };
+    }
+    return undefined;
   }
 
   createCustomer(data: Partial<DemoCustomer>) {

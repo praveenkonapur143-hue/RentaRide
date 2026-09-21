@@ -4,7 +4,7 @@ import { requireAuth } from '@/lib/api-auth';
 import { validateCustomerInput } from '@/lib/validation/schemas';
 
 export async function GET(req: NextRequest) {
-  const auth = requireAuth(req, ['ADMIN', 'STAFF']);
+  const auth = requireAuth(req, ['ADMIN', 'STAFF', 'CUSTOMER']);
   if (!auth.authorized) return auth.response;
 
   const { searchParams } = new URL(req.url);

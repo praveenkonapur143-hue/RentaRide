@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: result.error }, { status: 401 });
     }
 
-    const res = NextResponse.json({ success: true, user: result.user });
+    const res = NextResponse.json({ success: true, user: result.user, token: result.token });
     // Set HTTP-only secure cookie
     res.cookies.set('rentaride_token', result.token, {
       httpOnly: true,

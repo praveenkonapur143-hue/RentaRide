@@ -33,6 +33,13 @@ interface PaymentModalProps {
     fuelType: string;
     images?: { url: string }[];
   };
+  customer?: {
+    id?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
+    drivingLicenceNumber?: string;
+  };
   bookingParams?: {
     pickupDate?: string;
     returnDate?: string;
@@ -47,6 +54,7 @@ export default function PaymentModal({
   isOpen,
   onClose,
   vehicle,
+  customer,
   bookingParams = {}
 }: PaymentModalProps) {
   const days = bookingParams.days || 2;
@@ -68,11 +76,32 @@ export default function PaymentModal({
   // Active payment gateway tab
   const [activeTab, setActiveTab] = useState<'UPI' | 'CARD' | 'NETBANKING' | 'PAYPAL'>('UPI');
 
-  // Customer details
-  const [customerName, setCustomerName] = useState('Praveen Kumar');
-  const [customerPhone, setCustomerPhone] = useState('+91 98765 43210');
-  const [customerEmail, setCustomerEmail] = useState('praveen.kumar@example.com');
-  const [drivingLicence, setDrivingLicence] = useState('DL-1420240098765');
+  // Customer details - initialized from props or defaults
+  const [customerName, setCustomerName] = useState(customer?.name || 'Aarav Sharma');
+  const [customerPhone, setCustomerPhone] = useState(customer?.phone || '+91 98450 12399');
+  const [customerEmail, setCustomerEmail] = useState(customer?.email || 'aarav.sharma@example.in');
+  const [drivingLicence, setDrivingLicence] = useState(customer?.drivingLicenceNumber || 'KA-0520190089123');
+
+  // Keep customer details synced if customer prop changes or fetch from session
+  useEffect(() => {
+    if (customer?.name) setCustomerName(customer.name);
+    if (customer?.phone) setCustomerPhone(customer.phone);
+    if (customer?.email) setCustomerEmail(customer.email);
+    if (customer?.drivingLicenceNumber) setDrivingLicence(customer.drivingLicenceNumber);
+
+    if (!customer?.name && isOpen) {
+      fetch('/api/auth/me')
+        .then((r) => r.json())
+        .then((data) => {
+          if (data?.user?.name) {
+            setCustomerName(data.user.name);
+            setCustomerEmail(data.user.email);
+            if (data.user.phone) setCustomerPhone(data.user.phone);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [customer, isOpen]);
 
   // Payment UI state
   const [loading, setLoading] = useState(false);
@@ -162,6 +191,7 @@ export default function PaymentModal({
           razorpay_payment_id: `pay_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`,
           paymentMethod: activeTab,
           vehicleId: vehicle.id,
+          customerId: customer?.id,
           customerName,
           customerEmail,
           customerPhone,
