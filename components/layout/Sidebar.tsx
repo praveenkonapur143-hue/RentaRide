@@ -9,6 +9,7 @@ import {
   Car,
   CalendarCheck,
   Users,
+  User,
   ClipboardCheck,
   AlertTriangle,
   CreditCard,
@@ -30,6 +31,7 @@ export function Sidebar({ userRole = 'ADMIN', isOpen = false, onClose }: Sidebar
   const pathname = usePathname();
 
   const navigation = [
+    ...(userRole === 'CUSTOMER' ? [{ name: 'My Renter Account', href: '/my-account', icon: User }] : []),
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Fleet / Vehicles', href: '/dashboard/vehicles', icon: Car },
     { name: 'Bookings & Rentals', href: '/dashboard/bookings', icon: CalendarCheck },

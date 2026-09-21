@@ -171,6 +171,10 @@ class InMemoryStore {
     return this.customers.find(c => c.id === id);
   }
 
+  getCustomerByEmail(email: string) {
+    return this.customers.find(c => c.email.toLowerCase() === email.toLowerCase());
+  }
+
   createCustomer(data: Partial<DemoCustomer>) {
     const id = `cust-${Date.now()}`;
     const stateCodes = ['KA', 'DL', 'MH', 'TS', 'HR'];

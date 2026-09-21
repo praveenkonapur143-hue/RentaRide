@@ -82,19 +82,37 @@ function NewBookingForm() {
     }
   }, [pickupDate]);
 
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
   // Load Customers & Vehicles
   useEffect(() => {
     async function loadData() {
       try {
-        const [cRes, vRes] = await Promise.all([
+        const [cRes, vRes, meRes] = await Promise.all([
           fetch('/api/customers'),
           fetch('/api/vehicles?includeArchived=false'),
+          fetch('/api/auth/me'),
         ]);
         const cData = await cRes.json();
         const vData = await vRes.json();
+        const meData = await meRes.json();
 
         setCustomers(cData.customers || []);
         setVehicles(vData.vehicles || []);
+
+        if (meData?.user) {
+          setCurrentUser(meData.user);
+          if (meData.user.role === 'CUSTOMER') {
+            const matched = (cData.customers || []).find(
+              (c: any) =>
+                c.email.toLowerCase() === meData.user.email?.toLowerCase() ||
+                c.id === meData.user.id
+            );
+            if (matched) {
+              setCustomerId(matched.id);
+            }
+          }
+        }
 
         if (!customerId && cData.customers?.length) {
           setCustomerId(cData.customers[0].id);
@@ -207,7 +225,11 @@ function NewBookingForm() {
         return;
       }
 
-      router.push(`/dashboard/bookings/${data.booking.id}`);
+      if (currentUser?.role === 'CUSTOMER') {
+        router.push('/my-account');
+      } else {
+        router.push(`/dashboard/bookings/${data.booking.id}`);
+      }
       router.refresh();
     } catch (err: any) {
       setError(err.message || 'Submission error');
@@ -253,26 +275,46 @@ function NewBookingForm() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Select Customer (Aadhaar / DL Verified) *
+                  Renter Identity (Aadhaar / DL Verified) *
                 </label>
-                <select
-                  required
-                  value={customerId}
-                  onChange={(e) => setCustomerId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50"
-                >
-                  {customers.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.fullName} ({c.drivingLicenceNumber})
-                    </option>
-                  ))}
-                </select>
-                <Link
-                  href="/dashboard/customers/new"
-                  className="inline-block text-[11px] font-bold text-emerald-600 hover:underline mt-1.5"
-                >
-                  + Quick Register Customer (Aadhaar / DigiLocker)
-                </Link>
+                {currentUser?.role === 'CUSTOMER' ? (
+                  <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-slate-800 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-extrabold text-emerald-950 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        {customers.find((c) => c.id === customerId)?.fullName || currentUser.name}
+                      </span>
+                      <span className="text-[10px] bg-emerald-200/80 text-emerald-900 font-bold px-2 py-0.5 rounded-full">
+                        DigiLocker KYC Verified
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-emerald-800 flex flex-wrap gap-x-3">
+                      <span>DL: {customers.find((c) => c.id === customerId)?.drivingLicenceNumber || 'Verified on file'}</span>
+                      <span>Phone: {customers.find((c) => c.id === customerId)?.phone || currentUser.phone || 'On file'}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <select
+                      required
+                      value={customerId}
+                      onChange={(e) => setCustomerId(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-slate-50/50"
+                    >
+                      {customers.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.fullName} ({c.drivingLicenceNumber})
+                        </option>
+                      ))}
+                    </select>
+                    <Link
+                      href="/dashboard/customers/new"
+                      className="inline-block text-[11px] font-bold text-emerald-600 hover:underline mt-1.5"
+                    >
+                      + Quick Register Customer (Aadhaar / DigiLocker)
+                    </Link>
+                  </>
+                )}
               </div>
 
               <div>

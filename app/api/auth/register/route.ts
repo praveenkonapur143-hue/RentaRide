@@ -4,13 +4,18 @@ import { AuthService } from '@/modules/auth/service';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, password, role } = body;
+    const { name, email, password, role, phone, drivingLicenceNumber, address } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
     }
 
-    const result = await AuthService.register(name, email, password, role || 'STAFF');
+    const assignedRole = role || 'CUSTOMER';
+    const result = await AuthService.register(name, email, password, assignedRole, {
+      phone,
+      drivingLicenceNumber,
+      address,
+    });
     if ('error' in result) {
       return NextResponse.json({ error: result.error }, { status: 400 });
     }

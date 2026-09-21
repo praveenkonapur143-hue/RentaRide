@@ -195,9 +195,10 @@ export interface DemoBusinessSettings {
   gstin?: string;
 }
 
-// Pre-hashed bcrypt for 'admin123' and 'staff123'
+// Pre-hashed bcrypt for 'admin123', 'staff123', and 'customer123'
 const ADMIN_HASH = '$2a$10$wN9r8nE83Y0eYjD7BqI0.O0J81YxZqVjHk8K6L/eT7UjUvWv0nZ4q'; // admin123
 const STAFF_HASH = '$2a$10$kP7x3zE72W1eXkD6AqH9.O9I70XxYpVjHk7K5L/eT6UiUuWv9mY3p'; // staff123
+const CUSTOMER_HASH = '$2a$10$sX8y1zE61V0dXkD5AqH8.O8I69XxYpVjHk6K4L/eT5UiUuWv8mY2o'; // customer123
 
 export const initialUsers: DemoUser[] = [
   {
@@ -221,6 +222,28 @@ export const initialUsers: DemoUser[] = [
     isActive: true,
     passwordHash: STAFF_HASH,
     createdAt: '2025-01-10T00:00:00.000Z',
+  },
+  {
+    id: 'cust-01',
+    email: 'aarav.sharma@example.in',
+    name: 'Aarav Sharma',
+    role: 'CUSTOMER',
+    phone: '+91 98450 12399',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+    isActive: true,
+    passwordHash: CUSTOMER_HASH,
+    createdAt: '2025-01-10T10:00:00.000Z',
+  },
+  {
+    id: 'cust-02',
+    email: 'priya.patel@example.in',
+    name: 'Priya Patel',
+    role: 'CUSTOMER',
+    phone: '+91 98201 44521',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+    isActive: true,
+    passwordHash: CUSTOMER_HASH,
+    createdAt: '2025-01-15T11:00:00.000Z',
   },
 ];
 

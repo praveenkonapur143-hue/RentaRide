@@ -63,6 +63,20 @@ export default function RegisterPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4">
+        {/* Prominent customer renter redirect banner */}
+        <div className="mb-5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200/90 text-slate-800 shadow-sm flex items-center justify-between">
+          <div>
+            <span className="text-xs font-black text-emerald-950 block">Are you a Customer / Renter?</span>
+            <span className="text-[11px] text-emerald-700">Register with Indian Driving Licence to book cars.</span>
+          </div>
+          <Link
+            href="/user/register"
+            className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition active:scale-95 shrink-0"
+          >
+            Renter Sign Up →
+          </Link>
+        </div>
+
         <div className="bg-white py-8 px-6 sm:px-10 shadow-xl rounded-3xl border border-slate-200/80">
           {error && (
             <div className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700">
